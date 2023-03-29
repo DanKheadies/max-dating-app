@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.max_dating_app">
+    package="com.dtfun.max_dating_app">
    <application
         android:label="max_dating_app"
         android:name="${applicationName}"
