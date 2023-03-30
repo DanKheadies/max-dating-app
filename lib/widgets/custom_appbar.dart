@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+  final String title;
+  final bool hasActions;
+
   const CustomAppBar({
     super.key,
+    required this.title,
+    this.hasActions = true,
   });
 
   @override
@@ -22,28 +27,30 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           Expanded(
             flex: 2,
             child: Text(
-              'DISCOVER',
+              title,
               style: Theme.of(context).textTheme.displayMedium,
             ),
           ),
         ],
       ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.message,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(
-            Icons.person,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () {},
-        ),
-      ],
+      actions: hasActions
+          ? [
+              IconButton(
+                icon: Icon(
+                  Icons.message,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.person,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () {},
+              ),
+            ]
+          : [],
     );
   }
 

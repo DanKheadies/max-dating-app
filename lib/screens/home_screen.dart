@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
-import 'package:max_dating_app/models/models.dart';
+// import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +19,9 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      appBar: const CustomAppBar(
+        title: 'DISCOVER',
+      ),
       body: BlocBuilder<SwipeBloc, SwipeState>(
         builder: (context, state) {
           if (state is SwipeLoading) {
@@ -29,27 +31,36 @@ class HomeScreen extends StatelessWidget {
           } else if (state is SwipeLoaded) {
             return Column(
               children: [
-                Draggable(
-                  feedback: UserCard(user: state.users[0]),
-                  childWhenDragging: UserCard(user: state.users[1]),
-                  onDragEnd: (drag) {
-                    if (drag.velocity.pixelsPerSecond.dx < 0) {
-                      print('Swiped left');
-                      context.read<SwipeBloc>().add(
-                            SwipeLeftEvent(
-                              user: state.users[0],
-                            ),
-                          );
-                    } else {
-                      print('Swiped right');
-                      context.read<SwipeBloc>().add(
-                            SwipeRightEvent(
-                              user: state.users[0],
-                            ),
-                          );
-                    }
+                InkWell(
+                  onDoubleTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/user',
+                      arguments: state.users[0],
+                    );
                   },
-                  child: UserCard(user: state.users[0]),
+                  child: Draggable(
+                    feedback: UserCard(user: state.users[0]),
+                    childWhenDragging: UserCard(user: state.users[1]),
+                    onDragEnd: (drag) {
+                      if (drag.velocity.pixelsPerSecond.dx < 0) {
+                        print('Swiped left');
+                        context.read<SwipeBloc>().add(
+                              SwipeLeftEvent(
+                                user: state.users[0],
+                              ),
+                            );
+                      } else {
+                        print('Swiped right');
+                        context.read<SwipeBloc>().add(
+                              SwipeRightEvent(
+                                user: state.users[0],
+                              ),
+                            );
+                      }
+                    },
+                    child: UserCard(user: state.users[0]),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
@@ -69,10 +80,10 @@ class HomeScreen extends StatelessWidget {
                               );
                         },
                         child: ChoiceButton(
-                          width: 60,
-                          height: 60,
-                          size: 25,
-                          hasGradient: false,
+                          // width: 60,
+                          // height: 60,
+                          // size: 25,
+                          // hasGradient: false,
                           color: Theme.of(context).colorScheme.secondary,
                           icon: Icons.clear_rounded,
                         ),
@@ -96,10 +107,10 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       ChoiceButton(
-                        width: 60,
-                        height: 60,
-                        size: 25,
-                        hasGradient: false,
+                        // width: 60,
+                        // height: 60,
+                        // size: 25,
+                        // hasGradient: false,
                         color: Theme.of(context).colorScheme.primary,
                         icon: Icons.watch_later,
                       ),

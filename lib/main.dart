@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Max Dating App',
         theme: theme(),
-        home: const HomeScreen(),
+        onGenerateRoute: AppRouter.onGenerateRoute,
+        initialRoute: ProfileScreen.routeName,
       ),
     );
   }

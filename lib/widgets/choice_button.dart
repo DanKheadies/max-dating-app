@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class ChoiceButton extends StatelessWidget {
+  final bool hasGradient;
+  final Color color;
   final double width;
   final double height;
   final double size;
-  final Color color;
-  final bool hasGradient;
   final IconData icon;
 
   const ChoiceButton({
     super.key,
-    required this.width,
-    required this.height,
-    required this.size,
+    this.hasGradient = false,
     required this.color,
-    required this.hasGradient,
+    this.width = 60,
+    this.height = 60,
+    this.size = 25,
     required this.icon,
   });
 
@@ -41,7 +41,7 @@ class ChoiceButton extends StatelessWidget {
               ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withAlpha(50),
+            color: Colors.grey.withOpacity(0.5),
             spreadRadius: 4,
             blurRadius: 4,
             offset: const Offset(3, 3),
