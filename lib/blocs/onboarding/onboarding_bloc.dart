@@ -1,10 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:meta/meta.dart';
 
 import 'package:max_dating_app/models/models.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 
 part 'onboarding_event.dart';
 part 'onboarding_state.dart';
@@ -28,26 +28,58 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     StartOnboarding event,
     Emitter<OnboardingState> emit,
   ) async {
-    User user = User.empty;
+    print('start');
+    // User user = User.empty;
 
-    String documentId = await _databaseRepository.createUser(user);
+    // String documentId = await _databaseRepository.createUser(user);
+    await _databaseRepository.createUser(event.user);
+    print('awaited');
 
     emit(
       OnboardingLoaded(
-        user: user.copyWith(
-          id: documentId,
-        ),
+        // user: user.copyWith(
+        //   id: documentId,
+        // ),
+        user: event.user,
       ),
     );
+    print('emitted');
   }
 
   void _onUpdateUser(
     UpdateUser event,
     Emitter<OnboardingState> emit,
-  ) {}
+  ) {
+    print('update');
+    final state = this.state;
+    if (state is OnboardingLoaded) {
+      print('loaded');
+      _databaseRepository.updateUser(event.user);
+      emit(
+        OnboardingLoaded(
+          user: event.user,
+        ),
+      );
+    }
+  }
 
   void _onUpdateUserImages(
     UpdateUserImages event,
     Emitter<OnboardingState> emit,
-  ) {}
+  ) async {
+    final state = this.state;
+    if (state is OnboardingLoaded) {
+      User user = state.user;
+
+      await _storageRepository.uploadImage(user, event.image);
+
+      _databaseRepository.getUser(user.id!).listen((user) {
+        add(
+          UpdateUser(
+            user: user,
+          ),
+        );
+      });
+    }
+  }
 }

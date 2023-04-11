@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:max_dating_app/repositories/repositories.dart';
+import 'package:max_dating_app/blocs/blocs.dart';
 
 class CustomImageContainer extends StatelessWidget {
   final String? imageUrl;
@@ -40,6 +41,7 @@ class CustomImageContainer extends StatelessWidget {
                   ),
                   onPressed: () async {
                     var scon = ScaffoldMessenger.of(context);
+                    var onCon = context.read<OnboardingBloc>();
 
                     ImagePicker picker = ImagePicker();
                     final XFile? image = await picker.pickImage(
@@ -54,7 +56,11 @@ class CustomImageContainer extends StatelessWidget {
                       );
                     } else {
                       print('uploading');
-                      StorageRepository().uploadImage(image);
+                      onCon.add(
+                        UpdateUserImages(
+                          image: image,
+                        ),
+                      );
                     }
                   },
                 ),

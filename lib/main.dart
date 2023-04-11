@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/config/config.dart';
+import 'package:max_dating_app/cubits/cubits.dart';
 import 'package:max_dating_app/firebase_options.dart';
 import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/auth/auth_repository.dart';
@@ -26,35 +27,51 @@ class MyApp extends StatelessWidget {
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
-          create: (_) => AuthRepository(),
+          create: (context) => AuthRepository(),
         ),
-        // RepositoryProvider(
-        //   create: (_) => DatabaseRepository(),
-        // ),
-        // RepositoryProvider(
-        //   create: (_) => StorageRepository(),
-        // ),
+        RepositoryProvider(
+          create: (_) => DatabaseRepository(),
+        ),
+        RepositoryProvider(
+          create: (_) => StorageRepository(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => AuthBloc(
+            create: (context) => AuthBloc(
+              authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          // BlocProvider(
+          //   create: (_) => ImagesBloc(
+          //     // databaseRepository: context.read<DatabaseRepository>(),
+          //     databaseRepository: DatabaseRepository(),
+          //   )..add(
+          //       LoadImages(),
+          //     ),
+          // ),
+          BlocProvider(
+            create: (context) => SignUpCubit(
               authRepository: context.read<AuthRepository>(),
             ),
           ),
           BlocProvider(
-            create: (_) => ImagesBloc(
-              // databaseRepository: context.read<DatabaseRepository>(),
-              databaseRepository: DatabaseRepository(),
-            )..add(
-                LoadImages(),
-              ),
+            create: (context) => OnboardingBloc(
+              // databaseRepository: DatabaseRepository(),
+              databaseRepository: context.read<DatabaseRepository>(),
+              // storageRepository: StorageRepository(),
+              storageRepository: context.read<StorageRepository>(),
+              // )..add(
+              //     StartOnboarding(),
+            ),
           ),
           BlocProvider(
-            create: (_) => SwipeBloc()
+            create: (context) => SwipeBloc()
               ..add(
                 LoadUsers(
-                  users: User.users,
+                  // users: User.users,
+                  users: User.users.where((user) => user.id != 1).toList(),
                 ),
               ),
           ),
@@ -63,8 +80,7 @@ class MyApp extends StatelessWidget {
           title: 'Max Dating App',
           theme: theme(),
           onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: OnboardingScreen.routeName,
-          // initialRoute: HomeScreen.routeName,
+          initialRoute: SplashScreen.routeName,
         ),
       ),
     );

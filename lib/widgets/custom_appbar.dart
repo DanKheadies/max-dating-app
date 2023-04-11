@@ -19,9 +19,18 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       title: Row(
         children: [
           Expanded(
-            child: SvgPicture.asset(
-              'assets/images/logo.svg',
-              height: 50,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/home',
+                  (route) => false,
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/images/logo.svg',
+                height: 50,
+              ),
             ),
           ),
           Expanded(
@@ -47,7 +56,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   Icons.person,
                   color: Theme.of(context).primaryColor,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  // Navigator.of(context).pu
+                  Navigator.pushNamed(
+                    context,
+                    '/profile',
+                  );
+                },
               ),
             ]
           : [],

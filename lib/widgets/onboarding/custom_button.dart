@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/cubits/cubits.dart';
+import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/models/models.dart';
 
 class CustomButton extends StatelessWidget {
   final TabController tabController;
@@ -32,9 +34,27 @@ class CustomButton extends StatelessWidget {
       ),
       child: ElevatedButton(
         onPressed: () async {
-          tabController.animateTo(tabController.index + 1);
+          var suCon = context.read<SignUpCubit>();
+          var onCon = context.read<OnboardingBloc>();
+
+          if (tabController.index == 5) {
+            Navigator.pushNamed(context, '/');
+          } else {
+            tabController.animateTo(tabController.index + 1);
+          }
+
           if (tabController.index == 2) {
-            context.read<SignUpCubit>().signUpWithCredentials();
+            await context.read<SignUpCubit>().signUpWithCredentials();
+
+            User user = User.empty.copyWith(
+              id: suCon.state.user!.uid,
+            );
+
+            onCon.add(
+              StartOnboarding(
+                user: user,
+              ),
+            );
           }
         },
         style: ElevatedButton.styleFrom(

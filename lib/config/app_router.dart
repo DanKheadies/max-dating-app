@@ -9,26 +9,24 @@ class AppRouter {
     // print(settings);
 
     switch (settings.name) {
-      // case '/':
-      // return HomeScreen.route();
-      case HomeScreen.routeName:
-        return HomeScreen.route();
-      // case SplashScreen.routeName:
-      //   return SplashScreen.route();
-      case UserScreen.routeName:
-        // return UsersScreen.route();
-        return UserScreen.route(
-          user: settings.arguments as User,
-        );
-      case OnboardingScreen.routeName:
-        return OnboardingScreen.route();
-      case MatchesScreen.routeName:
-        return MatchesScreen.route();
-      case ProfileScreen.routeName:
-        return ProfileScreen.route();
+      case '/':
+        // case SplashScreen.routeName:
+        return SplashScreen.route();
       case ChatScreen.routeName:
         return ChatScreen.route(
           userMatch: settings.arguments as UserMatch,
+        );
+      case HomeScreen.routeName:
+        return HomeScreen.route();
+      case MatchesScreen.routeName:
+        return MatchesScreen.route();
+      case OnboardingScreen.routeName:
+        return OnboardingScreen.route();
+      case ProfileScreen.routeName:
+        return ProfileScreen.route();
+      case UserScreen.routeName:
+        return UserScreen.route(
+          user: settings.arguments as User,
         );
       default:
         return _errorRoute();

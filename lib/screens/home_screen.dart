@@ -6,7 +6,7 @@ import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String routeName = '/';
+  static const String routeName = '/home';
   static Route route() {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),

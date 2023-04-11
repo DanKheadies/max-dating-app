@@ -17,11 +17,14 @@ class AuthRepository extends BaseAuthRepository {
     required String email,
     required String password,
   }) async {
+    print('sign up');
     try {
+      print('try to..');
       final credential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+      print('creds: $credential');
 
       final user = credential.user;
       return user;
@@ -36,4 +39,9 @@ class AuthRepository extends BaseAuthRepository {
 
   @override
   Stream<auth.User?> get user => _firebaseAuth.userChanges();
+
+  @override
+  Future<void> signOut() async {
+    await _firebaseAuth.signOut();
+  }
 }

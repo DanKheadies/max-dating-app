@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatelessWidget {
   final String text;
+  final bool value;
+  final Function(bool?)? onChanged;
 
   const CustomCheckbox({
     super.key,
     required this.text,
+    required this.value,
+    required this.onChanged,
   });
 
   @override
@@ -13,8 +17,8 @@ class CustomCheckbox extends StatelessWidget {
     return Row(
       children: [
         Checkbox(
-          value: false,
-          onChanged: (newValue) {},
+          value: value,
+          onChanged: onChanged,
         ),
         Text(
           text,

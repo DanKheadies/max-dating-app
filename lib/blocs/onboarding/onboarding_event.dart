@@ -8,7 +8,28 @@ abstract class OnboardingEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class StartOnboarding extends OnboardingEvent {}
+class StartOnboarding extends OnboardingEvent {
+  final User user;
+
+  const StartOnboarding({
+    this.user = const User(
+      id: '',
+      name: '',
+      age: 0,
+      gender: '',
+      imageUrls: [],
+      interests: [],
+      bio: '',
+      location: '',
+      jobTitle: '',
+    ),
+  });
+
+  @override
+  List<Object?> get props => [
+        user,
+      ];
+}
 
 class UpdateUser extends OnboardingEvent {
   final User user;
@@ -18,7 +39,9 @@ class UpdateUser extends OnboardingEvent {
   });
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [
+        user,
+      ];
 }
 
 class UpdateUserImages extends OnboardingEvent {
@@ -31,5 +54,8 @@ class UpdateUserImages extends OnboardingEvent {
   });
 
   @override
-  List<Object?> get props => [user, image];
+  List<Object?> get props => [
+        user,
+        image,
+      ];
 }
