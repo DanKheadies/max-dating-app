@@ -9,13 +9,13 @@ part 'swipe_state.dart';
 
 class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   SwipeBloc() : super(SwipeLoading()) {
-    on<LoadUsersEvent>(_onSwipeLoaded);
-    on<SwipeLeftEvent>(_onSwipeLeft);
-    on<SwipeRightEvent>(_onSwipeRight);
+    on<LoadUsers>(_onLoadUsers);
+    on<SwipeLeft>(_onSwipeLeft);
+    on<SwipeRight>(_onSwipeRight);
   }
 
-  void _onSwipeLoaded(
-    LoadUsersEvent event,
+  void _onLoadUsers(
+    LoadUsers event,
     Emitter<SwipeState> emit,
   ) async {
     emit(
@@ -26,7 +26,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   }
 
   void _onSwipeLeft(
-    SwipeLeftEvent event,
+    SwipeLeft event,
     Emitter<SwipeState> emit,
   ) {
     final state = this.state;
@@ -40,7 +40,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   }
 
   void _onSwipeRight(
-    SwipeRightEvent event,
+    SwipeRight event,
     Emitter<SwipeState> emit,
   ) {
     final state = this.state;

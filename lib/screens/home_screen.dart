@@ -44,22 +44,24 @@ class HomeScreen extends StatelessWidget {
                     childWhenDragging: UserCard(user: state.users[1]),
                     onDragEnd: (drag) {
                       if (drag.velocity.pixelsPerSecond.dx < 0) {
-                        print('Swiped left');
+                        // print('Swiped left');
                         context.read<SwipeBloc>().add(
-                              SwipeLeftEvent(
+                              SwipeLeft(
                                 user: state.users[0],
                               ),
                             );
                       } else {
-                        print('Swiped right');
+                        // print('Swiped right');
                         context.read<SwipeBloc>().add(
-                              SwipeRightEvent(
+                              SwipeRight(
                                 user: state.users[0],
                               ),
                             );
                       }
                     },
-                    child: UserCard(user: state.users[0]),
+                    child: UserCard(
+                      user: state.users[0],
+                    ),
                   ),
                 ),
                 Padding(
@@ -72,9 +74,9 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          print('Swiped left');
+                          // print('Swiped left');
                           context.read<SwipeBloc>().add(
-                                SwipeLeftEvent(
+                                SwipeLeft(
                                   user: state.users[0],
                                 ),
                               );
@@ -90,9 +92,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          print('Swiped right');
+                          // print('Swiped right');
                           context.read<SwipeBloc>().add(
-                                SwipeRightEvent(
+                                SwipeRight(
                                   user: state.users[0],
                                 ),
                               );

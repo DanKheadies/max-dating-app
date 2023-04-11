@@ -13,6 +13,8 @@ class BioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = TextEditingController();
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 30,
@@ -24,17 +26,15 @@ class BioScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(
-                tabController: tabController,
+              const CustomTextHeader(
                 text: 'Describe Yourself a Bit',
               ),
               CustomTextField(
-                tabController: tabController,
-                text: 'ENTER YOUR BIO',
+                controller: controller,
+                hint: 'ENTER YOUR BIO',
               ),
               const SizedBox(height: 100),
-              CustomTextHeader(
-                tabController: tabController,
+              const CustomTextHeader(
                 text: 'What Do You Like?',
               ),
               Row(

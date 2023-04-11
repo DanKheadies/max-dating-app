@@ -77,7 +77,7 @@ class UserScreen extends StatelessWidget {
                           size: 30,
                           hasGradient: true,
                           color: Colors.white,
-                          icon: Icons.clear_rounded,
+                          icon: Icons.favorite,
                         ),
                         ChoiceButton(
                           color: Theme.of(context).colorScheme.primary,

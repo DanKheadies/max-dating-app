@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:max_dating_app/cubits/cubits.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
@@ -8,7 +11,12 @@ class OnboardingScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
-      builder: (context) => const OnboardingScreen(),
+      builder: (context) => BlocProvider(
+        create: (_) => SignUpCubit(
+          authRepository: context.read<AuthRepository>(),
+        ),
+        child: const OnboardingScreen(),
+      ),
     );
   }
 
@@ -21,6 +29,7 @@ class OnboardingScreen extends StatelessWidget {
     Tab(text: 'Demographics'),
     Tab(text: 'Pictures'),
     Tab(text: 'Biography'),
+    Tab(text: 'Location'),
   ];
 
   @override
@@ -47,6 +56,7 @@ class OnboardingScreen extends StatelessWidget {
                 DemoScreen(tabController: tabController),
                 PicturesScreen(tabController: tabController),
                 BioScreen(tabController: tabController),
+                LocationScreen(tabController: tabController),
               ],
             ),
           );

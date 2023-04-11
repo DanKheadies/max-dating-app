@@ -24,27 +24,23 @@ class DemoScreen extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTextHeader(
-                tabController: tabController,
+              const CustomTextHeader(
                 text: 'What\'s Your Gender?',
               ),
               const SizedBox(height: 10),
-              CustomCheckbox(
-                tabController: tabController,
+              const CustomCheckbox(
                 text: 'MALE',
               ),
-              CustomCheckbox(
-                tabController: tabController,
+              const CustomCheckbox(
                 text: 'FEMALE',
               ),
               const SizedBox(height: 100),
-              CustomTextHeader(
-                tabController: tabController,
+              const CustomTextHeader(
                 text: 'What\'s Your Age?',
               ),
               CustomTextField(
-                tabController: tabController,
-                text: 'ENTER YOUR AGE',
+                controller: TextEditingController(),
+                hint: 'ENTER YOUR AGE',
               ),
             ],
           ),

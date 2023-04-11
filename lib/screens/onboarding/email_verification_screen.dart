@@ -23,13 +23,12 @@ class EmailVerificationScreen extends StatelessWidget {
         children: [
           Column(
             children: [
-              CustomTextHeader(
-                tabController: tabController,
+              const CustomTextHeader(
                 text: 'Did You Get The Verification Code?',
               ),
               CustomTextField(
-                tabController: tabController,
-                text: 'ENTER YOUR CODE',
+                controller: TextEditingController(),
+                hint: 'ENTER YOUR CODE',
               ),
             ],
           ),

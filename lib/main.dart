@@ -1,12 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/config/config.dart';
+import 'package:max_dating_app/firebase_options.dart';
 import 'package:max_dating_app/models/models.dart';
+import 'package:max_dating_app/repositories/auth/auth_repository.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -15,22 +23,49 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
+    return MultiRepositoryProvider(
       providers: [
-        BlocProvider(
-          create: (_) => SwipeBloc()
-            ..add(
-              LoadUsersEvent(
-                users: User.users,
-              ),
-            ),
+        RepositoryProvider(
+          create: (_) => AuthRepository(),
         ),
+        // RepositoryProvider(
+        //   create: (_) => DatabaseRepository(),
+        // ),
+        // RepositoryProvider(
+        //   create: (_) => StorageRepository(),
+        // ),
       ],
-      child: MaterialApp(
-        title: 'Max Dating App',
-        theme: theme(),
-        onGenerateRoute: AppRouter.onGenerateRoute,
-        initialRoute: ProfileScreen.routeName,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => AuthBloc(
+              authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
+            create: (_) => ImagesBloc(
+              // databaseRepository: context.read<DatabaseRepository>(),
+              databaseRepository: DatabaseRepository(),
+            )..add(
+                LoadImages(),
+              ),
+          ),
+          BlocProvider(
+            create: (_) => SwipeBloc()
+              ..add(
+                LoadUsers(
+                  users: User.users,
+                ),
+              ),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Max Dating App',
+          theme: theme(),
+          onGenerateRoute: AppRouter.onGenerateRoute,
+          initialRoute: OnboardingScreen.routeName,
+          // initialRoute: HomeScreen.routeName,
+        ),
       ),
     );
   }

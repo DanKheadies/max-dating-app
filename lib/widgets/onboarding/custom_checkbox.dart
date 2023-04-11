@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomCheckbox extends StatelessWidget {
-  final TabController tabController;
   final String text;
 
   const CustomCheckbox({
     super.key,
-    required this.tabController,
     required this.text,
   });
 

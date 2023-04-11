@@ -1,12 +1,20 @@
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:max_dating_app/cubits/cubits.dart';
 
 class CustomButton extends StatelessWidget {
   final TabController tabController;
+  // final TextEditingController? emailController;
+  // final TextEditingController? passwordController;
   final String text;
 
   const CustomButton({
     super.key,
     required this.tabController,
+    // this.emailController,
+    // this.passwordController,
     required this.text,
   });
 
@@ -23,8 +31,11 @@ class CustomButton extends StatelessWidget {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async {
           tabController.animateTo(tabController.index + 1);
+          if (tabController.index == 2) {
+            context.read<SignUpCubit>().signUpWithCredentials();
+          }
         },
         style: ElevatedButton.styleFrom(
           elevation: 0,

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:max_dating_app/repositories/repositories.dart';
 
 class CustomImageContainer extends StatelessWidget {
-  final TabController tabController;
+  final String? imageUrl;
+  // final TabController tabController;
 
   const CustomImageContainer({
     super.key,
-    required this.tabController,
+    this.imageUrl,
+    // required this.tabController,
   });
 
   @override
@@ -23,34 +28,48 @@ class CustomImageContainer extends StatelessWidget {
           border: Border.all(
             color: Theme.of(context).colorScheme.primary,
             width: 1,
-            // bottom: BorderSide(
-            //   color: Theme.of(context).colorScheme.primary,
-            //   width: 1,
-            // ),
-            // top: BorderSide(
-            //   color: Theme.of(context).colorScheme.primary,
-            //   width: 1,
-            // ),
-            // bottom: BorderSide(
-            //   color: Theme.of(context).colorScheme.primary,
-            //   width: 1,
-            // ),
-            // bottom: BorderSide(
-            //   color: Theme.of(context).colorScheme.primary,
-            //   width: 1,
-            // ),
           ),
         ),
-        child: Align(
-          alignment: Alignment.bottomRight,
-          child: IconButton(
-            icon: Icon(
-              Icons.add_circle,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            onPressed: () {},
-          ),
-        ),
+        child: imageUrl == null
+            ? Align(
+                alignment: Alignment.bottomRight,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.add_circle,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  onPressed: () async {
+                    var scon = ScaffoldMessenger.of(context);
+
+                    ImagePicker picker = ImagePicker();
+                    final XFile? image = await picker.pickImage(
+                      source: ImageSource.gallery,
+                    );
+
+                    if (image == null) {
+                      scon.showSnackBar(
+                        const SnackBar(
+                          content: Text('No image was selected.'),
+                        ),
+                      );
+                    } else {
+                      print('uploading');
+                      StorageRepository().uploadImage(image);
+                    }
+                  },
+                ),
+              )
+            : ClipRRect(
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(50),
+                // ),
+                borderRadius: BorderRadius.circular(8),
+                // TODO: show circle if not fully loaded
+                child: Image.network(
+                  imageUrl!,
+                  fit: BoxFit.cover,
+                ),
+              ),
       ),
     );
   }
