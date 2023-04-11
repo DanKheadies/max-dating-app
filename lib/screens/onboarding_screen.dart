@@ -31,9 +31,6 @@ class OnboardingScreen extends StatelessWidget {
       child: Builder(
         builder: (context) {
           final TabController tabController = DefaultTabController.of(context);
-          // tabController.addListener(() {
-          //   if (!tabController.indexIsChanging) {}
-          // });
 
           return Scaffold(
             appBar: const CustomAppBar(

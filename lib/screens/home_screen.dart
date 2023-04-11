@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
-// import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -44,14 +43,12 @@ class HomeScreen extends StatelessWidget {
                     childWhenDragging: UserCard(user: state.users[1]),
                     onDragEnd: (drag) {
                       if (drag.velocity.pixelsPerSecond.dx < 0) {
-                        // print('Swiped left');
                         context.read<SwipeBloc>().add(
                               SwipeLeft(
                                 user: state.users[0],
                               ),
                             );
                       } else {
-                        // print('Swiped right');
                         context.read<SwipeBloc>().add(
                               SwipeRight(
                                 user: state.users[0],
@@ -74,7 +71,6 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       InkWell(
                         onTap: () {
-                          // print('Swiped left');
                           context.read<SwipeBloc>().add(
                                 SwipeLeft(
                                   user: state.users[0],
@@ -82,17 +78,12 @@ class HomeScreen extends StatelessWidget {
                               );
                         },
                         child: ChoiceButton(
-                          // width: 60,
-                          // height: 60,
-                          // size: 25,
-                          // hasGradient: false,
                           color: Theme.of(context).colorScheme.secondary,
                           icon: Icons.clear_rounded,
                         ),
                       ),
                       InkWell(
                         onTap: () {
-                          // print('Swiped right');
                           context.read<SwipeBloc>().add(
                                 SwipeRight(
                                   user: state.users[0],
@@ -109,10 +100,6 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       ChoiceButton(
-                        // width: 60,
-                        // height: 60,
-                        // size: 25,
-                        // hasGradient: false,
                         color: Theme.of(context).colorScheme.primary,
                         icon: Icons.watch_later,
                       ),

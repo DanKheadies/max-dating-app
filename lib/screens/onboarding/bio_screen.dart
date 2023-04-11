@@ -15,8 +15,6 @@ class BioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = TextEditingController();
-
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, state) {
         if (state is OnboardingLoading) {

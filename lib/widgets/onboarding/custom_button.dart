@@ -1,4 +1,3 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -8,15 +7,11 @@ import 'package:max_dating_app/models/models.dart';
 
 class CustomButton extends StatelessWidget {
   final TabController tabController;
-  // final TextEditingController? emailController;
-  // final TextEditingController? passwordController;
   final String text;
 
   const CustomButton({
     super.key,
     required this.tabController,
-    // this.emailController,
-    // this.passwordController,
     required this.text,
   });
 

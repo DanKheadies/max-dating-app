@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
@@ -32,16 +31,8 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  // Future<String> createUser(User user) async {
   Future<void> createUser(User user) async {
-    // String documentId = await _firebaseFirestore
     await _firebaseFirestore.collection('users').doc(user.id).set(user.toMap());
-    //   .then((value) {
-    // print('User added, ID: ${value.id}');
-    // return value.id;
-    // });
-
-    // return documentId;
   }
 
   @override

@@ -27,7 +27,6 @@ class EmailVerificationScreen extends StatelessWidget {
                 text: 'Did You Get The Verification Code?',
               ),
               CustomTextField(
-                // controller: TextEditingController(),
                 hint: 'ENTER YOUR CODE',
               ),
             ],

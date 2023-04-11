@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
-import 'package:max_dating_app/repositories/storage/base_storage_repository.dart';
 
 class StorageRepository extends BaseStorageRepository {
   final firebase_storage.FirebaseStorage storage =

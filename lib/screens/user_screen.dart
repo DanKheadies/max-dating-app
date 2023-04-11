@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 
-// import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
@@ -25,8 +23,6 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final User user = User.users[0];
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,

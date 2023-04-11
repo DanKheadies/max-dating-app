@@ -15,9 +15,6 @@ class EmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final emailController = TextEditingController();
-    // final passwordController = TextEditingController();
-
     return BlocBuilder<SignUpCubit, SignUpState>(
       builder: (context, state) {
         return Padding(
@@ -38,7 +35,6 @@ class EmailScreen extends StatelessWidget {
                       context.read<SignUpCubit>().emailChanged(value);
                     },
                     hint: 'ENTER YOUR EMAIL',
-                    // controller: emailController,
                   ),
                   const SizedBox(height: 75),
                   const CustomTextHeader(
@@ -49,7 +45,6 @@ class EmailScreen extends StatelessWidget {
                       context.read<SignUpCubit>().passwordChanged(value);
                     },
                     hint: 'ENTER YOUR PASSWORD',
-                    // controller: passwordController,
                   ),
                 ],
               ),
@@ -65,8 +60,6 @@ class EmailScreen extends StatelessWidget {
                   CustomButton(
                     tabController: tabController,
                     text: 'NEXT STEP',
-                    // emailController: emailController,
-                    // passwordController: passwordController,
                   ),
                 ],
               ),

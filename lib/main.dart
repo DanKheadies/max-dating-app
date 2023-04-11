@@ -7,7 +7,6 @@ import 'package:max_dating_app/config/config.dart';
 import 'package:max_dating_app/cubits/cubits.dart';
 import 'package:max_dating_app/firebase_options.dart';
 import 'package:max_dating_app/models/models.dart';
-import 'package:max_dating_app/repositories/auth/auth_repository.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 
@@ -43,34 +42,21 @@ class MyApp extends StatelessWidget {
               authRepository: context.read<AuthRepository>(),
             ),
           ),
-          // BlocProvider(
-          //   create: (_) => ImagesBloc(
-          //     // databaseRepository: context.read<DatabaseRepository>(),
-          //     databaseRepository: DatabaseRepository(),
-          //   )..add(
-          //       LoadImages(),
-          //     ),
-          // ),
+          BlocProvider(
+            create: (context) => OnboardingBloc(
+              databaseRepository: context.read<DatabaseRepository>(),
+              storageRepository: context.read<StorageRepository>(),
+            ),
+          ),
           BlocProvider(
             create: (context) => SignUpCubit(
               authRepository: context.read<AuthRepository>(),
             ),
           ),
           BlocProvider(
-            create: (context) => OnboardingBloc(
-              // databaseRepository: DatabaseRepository(),
-              databaseRepository: context.read<DatabaseRepository>(),
-              // storageRepository: StorageRepository(),
-              storageRepository: context.read<StorageRepository>(),
-              // )..add(
-              //     StartOnboarding(),
-            ),
-          ),
-          BlocProvider(
             create: (context) => SwipeBloc()
               ..add(
                 LoadUsers(
-                  // users: User.users,
                   users: User.users.where((user) => user.id != 1).toList(),
                 ),
               ),

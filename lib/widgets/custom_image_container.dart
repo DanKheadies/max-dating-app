@@ -6,12 +6,10 @@ import 'package:max_dating_app/blocs/blocs.dart';
 
 class CustomImageContainer extends StatelessWidget {
   final String? imageUrl;
-  // final TabController tabController;
 
   const CustomImageContainer({
     super.key,
     this.imageUrl,
-    // required this.tabController,
   });
 
   @override
@@ -55,7 +53,6 @@ class CustomImageContainer extends StatelessWidget {
                         ),
                       );
                     } else {
-                      print('uploading');
                       onCon.add(
                         UpdateUserImages(
                           image: image,
@@ -66,9 +63,6 @@ class CustomImageContainer extends StatelessWidget {
                 ),
               )
             : ClipRRect(
-                // decoration: BoxDecoration(
-                //   borderRadius: BorderRadius.circular(50),
-                // ),
                 borderRadius: BorderRadius.circular(8),
                 // TODO: show circle if not fully loaded
                 child: Image.network(

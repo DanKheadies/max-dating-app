@@ -17,8 +17,6 @@ class DemoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<OnboardingBloc, OnboardingState>(
       builder: (context, state) {
-        print('daco');
-        print(state);
         if (state is OnboardingLoading) {
           return const Center(
             child: CircularProgressIndicator(),
@@ -71,7 +69,6 @@ class DemoScreen extends StatelessWidget {
                       text: 'What\'s Your Age?',
                     ),
                     CustomTextField(
-                      // controller: TextEditingController(),
                       hint: 'ENTER YOUR AGE',
                       onChanged: (value) {
                         context.read<OnboardingBloc>().add(

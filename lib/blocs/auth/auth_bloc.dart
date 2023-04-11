@@ -40,16 +40,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         : emit(
             const AuthState.unauthenticated(),
           );
-    // event.authUser != null
-    //     ? emit(
-    //         AuthState.authenticated(
-    //           authUser: event.authUser!,
-    //           user: event.user!,
-    //         ),
-    //       )
-    //     : emit(
-    //         const AuthState.unauthenticated(),
-    //       );
   }
 
   @override

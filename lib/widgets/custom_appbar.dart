@@ -57,7 +57,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () {
-                  // Navigator.of(context).pu
                   Navigator.pushNamed(
                     context,
                     '/profile',

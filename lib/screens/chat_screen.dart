@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:max_dating_app/models/models.dart';
-import 'package:max_dating_app/widgets/widgets.dart';
 
 class ChatScreen extends StatelessWidget {
   static const String routeName = '/chat';
@@ -123,7 +122,6 @@ class ChatScreen extends StatelessWidget {
                 : const SizedBox(),
           ),
           Container(
-            // padding: const EdgeInsets.all(20),
             padding: const EdgeInsets.only(
               bottom: 35,
               top: 5,
