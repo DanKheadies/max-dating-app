@@ -21,11 +21,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           Expanded(
             child: InkWell(
               onTap: () {
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  '/home',
-                  (route) => false,
-                );
+                title == 'PROFILE'
+                    ? () {}
+                    : Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/home',
+                        (route) => false,
+                      );
               },
               child: SvgPicture.asset(
                 'assets/images/logo.svg',
@@ -42,6 +44,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           ),
         ],
       ),
+      // automaticallyImplyLeading: false,
       actions: hasActions
           ? [
               IconButton(
@@ -53,18 +56,31 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               ),
               IconButton(
                 icon: Icon(
-                  Icons.person,
+                  title == 'PROFILE' ? Icons.person_outline : Icons.person,
+                  // Icons.person,
                   color: Theme.of(context).primaryColor,
                 ),
+                enableFeedback: title == 'PROFILE' ? false : true,
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/profile',
-                  );
+                  title == 'PROFILE'
+                      ? () {}
+                      : Navigator.pushNamed(
+                          context,
+                          '/profile',
+                        );
                 },
               ),
             ]
           : [],
+      // actions: [
+      //   IconButton(
+      //     icon: Icon(
+      //       Icons.person_outline,
+      //       color: Theme.of(context).primaryColor,
+      //     ),
+      //     onPressed: () {},
+      //   ),
+      // ],
     );
   }
 

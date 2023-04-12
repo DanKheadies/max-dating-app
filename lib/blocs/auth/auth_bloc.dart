@@ -20,11 +20,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         super(const AuthState.unknown()) {
     on<AuthUserChanged>(_onAuthUserChanged);
 
-    _userSubscription = _authRepository.user.listen(
-      (user) => add(
+    _userSubscription = _authRepository.user.listen((user) {
+      add(
         AuthUserChanged(user: user),
-      ),
-    );
+      );
+    });
   }
 
   void _onAuthUserChanged(

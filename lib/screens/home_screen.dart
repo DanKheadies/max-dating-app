@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/screens/screens.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,7 +10,12 @@ class HomeScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
-      builder: (context) => const HomeScreen(),
+      builder: (context) {
+        return BlocProvider.of<AuthBloc>(context).state.status ==
+                AuthStatus.unauthenticated
+            ? const OnboardingScreen()
+            : const HomeScreen();
+      },
     );
   }
 
@@ -28,6 +34,7 @@ class HomeScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (state is SwipeLoaded) {
+            var userCount = state.users.length;
             return Column(
               children: [
                 InkWell(
@@ -39,8 +46,11 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                   child: Draggable(
+                    data: state.users[0],
                     feedback: UserCard(user: state.users[0]),
-                    childWhenDragging: UserCard(user: state.users[1]),
+                    childWhenDragging: userCount > 1
+                        ? UserCard(user: state.users[1])
+                        : const SizedBox(),
                     onDragEnd: (drag) {
                       if (drag.velocity.pixelsPerSecond.dx < 0) {
                         context.read<SwipeBloc>().add(
@@ -107,6 +117,14 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ],
+            );
+          }
+          if (state is SwipeError) {
+            return Center(
+              child: Text(
+                'There aren\'t any more users.',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
             );
           } else {
             return const Center(

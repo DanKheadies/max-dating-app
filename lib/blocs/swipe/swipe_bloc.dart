@@ -1,28 +1,71 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/models/models.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 
 part 'swipe_event.dart';
 part 'swipe_state.dart';
 
 class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
-  SwipeBloc() : super(SwipeLoading()) {
+  final AuthBloc _authBloc;
+  final DatabaseRepository _databaseRepository;
+  StreamSubscription? _authSubscription;
+
+  SwipeBloc({
+    required AuthBloc authBloc,
+    required DatabaseRepository databaseRepository,
+  })  : _authBloc = authBloc,
+        _databaseRepository = databaseRepository,
+        super(SwipeLoading()) {
     on<LoadUsers>(_onLoadUsers);
+    on<UpdateHome>(_onUpdateHome);
     on<SwipeLeft>(_onSwipeLeft);
     on<SwipeRight>(_onSwipeRight);
+
+    _authSubscription = _authBloc.stream.listen((state) {
+      if (state.status == AuthStatus.authenticated) {
+        add(
+          LoadUsers(
+            userId: state.user!.uid,
+          ),
+        );
+      }
+    });
   }
 
   void _onLoadUsers(
     LoadUsers event,
     Emitter<SwipeState> emit,
-  ) async {
-    emit(
-      SwipeLoaded(
-        users: event.users,
-      ),
-    );
+  ) {
+    _databaseRepository.getUsers(event.userId, 'Male').listen((users) {
+      add(
+        UpdateHome(
+          users: users,
+        ),
+      );
+    });
+  }
+
+  void _onUpdateHome(
+    UpdateHome event,
+    Emitter<SwipeState> emit,
+  ) {
+    if (event.users != null) {
+      emit(
+        SwipeLoaded(
+          users: event.users!,
+        ),
+      );
+    } else {
+      emit(
+        SwipeError(),
+      );
+    }
   }
 
   void _onSwipeLeft(
@@ -31,11 +74,19 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   ) {
     final state = this.state;
     if (state is SwipeLoaded) {
-      emit(
-        SwipeLoaded(
-          users: List.from(state.users)..remove(event.user),
-        ),
-      );
+      List<User> users = List.from(state.users)..remove(event.user);
+
+      if (users.isNotEmpty) {
+        emit(
+          SwipeLoaded(
+            users: users,
+          ),
+        );
+      } else {
+        emit(
+          SwipeError(),
+        );
+      }
     }
   }
 
@@ -45,11 +96,25 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   ) {
     final state = this.state;
     if (state is SwipeLoaded) {
-      emit(
-        SwipeLoaded(
-          users: List.from(state.users)..remove(event.user),
-        ),
-      );
+      List<User> users = List.from(state.users)..remove(event.user);
+
+      if (users.isNotEmpty) {
+        emit(
+          SwipeLoaded(
+            users: users,
+          ),
+        );
+      } else {
+        emit(
+          SwipeError(),
+        );
+      }
     }
+  }
+
+  @override
+  Future<void> close() async {
+    _authSubscription?.cancel();
+    super.close();
   }
 }

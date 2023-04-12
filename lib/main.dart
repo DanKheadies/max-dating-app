@@ -6,7 +6,7 @@ import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/config/config.dart';
 import 'package:max_dating_app/cubits/cubits.dart';
 import 'package:max_dating_app/firebase_options.dart';
-import 'package:max_dating_app/models/models.dart';
+// import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 
@@ -49,15 +49,30 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => ProfileBloc(
+              // authBloc: context.read<AuthBloc>(),
+              authBloc: BlocProvider.of<AuthBloc>(context),
+              databaseRepository: context.read<DatabaseRepository>(),
+            )..add(
+                LoadProfile(
+                  // userId: context.read<AuthBloc>().state.user!.uid,
+                  userId: BlocProvider.of<AuthBloc>(context).state.user!.uid,
+                ),
+              ),
+          ),
+          BlocProvider(
             create: (context) => SignUpCubit(
               authRepository: context.read<AuthRepository>(),
             ),
           ),
           BlocProvider(
-            create: (context) => SwipeBloc()
-              ..add(
+            create: (context) => SwipeBloc(
+              // authBloc: context.read<AuthBloc>(),
+              authBloc: BlocProvider.of<AuthBloc>(context),
+              databaseRepository: context.read<DatabaseRepository>(),
+            )..add(
                 LoadUsers(
-                  users: User.users.where((user) => user.id != 1).toList(),
+                  userId: BlocProvider.of<AuthBloc>(context).state.user!.uid,
                 ),
               ),
           ),
