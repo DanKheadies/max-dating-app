@@ -18,6 +18,8 @@ class AppRouter {
         );
       case HomeScreen.routeName:
         return HomeScreen.route();
+      case LoginScreen.routeName:
+        return LoginScreen.route();
       case MatchesScreen.routeName:
         return MatchesScreen.route();
       case OnboardingScreen.routeName:

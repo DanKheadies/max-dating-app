@@ -43,6 +43,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => LoginCubit(
+              authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+          BlocProvider(
             create: (context) => OnboardingBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               storageRepository: context.read<StorageRepository>(),
@@ -79,6 +84,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Max Dating App',
+          debugShowCheckedModeBanner: false,
           theme: theme(),
           onGenerateRoute: AppRouter.onGenerateRoute,
           initialRoute: SplashScreen.routeName,
