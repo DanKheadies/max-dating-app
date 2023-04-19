@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:meta/meta.dart';
 
+import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
 
 part 'auth_event.dart';
@@ -12,18 +13,36 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository _authRepository;
-  StreamSubscription<auth.User?>? _userSubscription;
+  final DatabaseRepository _databaseRepository;
+  StreamSubscription<auth.User?>? _authUserSubscription;
+  StreamSubscription<User?>? _userSubscription;
 
   AuthBloc({
     required AuthRepository authRepository,
+    required DatabaseRepository databaseRepository,
   })  : _authRepository = authRepository,
+        _databaseRepository = databaseRepository,
         super(const AuthState.unknown()) {
     on<AuthUserChanged>(_onAuthUserChanged);
 
-    _userSubscription = _authRepository.user.listen((user) {
-      add(
-        AuthUserChanged(user: user),
-      );
+    _authUserSubscription = _authRepository.user.listen((authUser) {
+      print('Auth user: $authUser');
+      if (authUser != null) {
+        _databaseRepository.getUser(authUser.uid).listen((user) {
+          add(
+            AuthUserChanged(
+              authUser: authUser,
+              user: user,
+            ),
+          );
+        });
+      } else {
+        add(
+          AuthUserChanged(
+            authUser: authUser,
+          ),
+        );
+      }
     });
   }
 
@@ -31,9 +50,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthUserChanged event,
     Emitter<AuthState> emit,
   ) {
-    event.user != null
+    event.authUser != null
         ? emit(
             AuthState.authenticated(
+              authUser: event.authUser!,
               user: event.user!,
             ),
           )
@@ -44,6 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Future<void> close() {
+    _authUserSubscription?.cancel();
     _userSubscription?.cancel();
     return super.close();
   }

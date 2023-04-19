@@ -31,7 +31,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       if (state.status == AuthStatus.authenticated) {
         add(
           LoadUsers(
-            userId: state.user!.uid,
+            user: state.user!,
           ),
         );
       }
@@ -42,7 +42,8 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     LoadUsers event,
     Emitter<SwipeState> emit,
   ) {
-    _databaseRepository.getUsers(event.userId, 'Male').listen((users) {
+    _databaseRepository.getUsers(event.user).listen((users) {
+      print('Loading Users: $users');
       add(
         UpdateHome(
           users: users,
@@ -55,7 +56,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     UpdateHome event,
     Emitter<SwipeState> emit,
   ) {
-    if (event.users != null) {
+    if (event.users!.isNotEmpty) {
       emit(
         SwipeLoaded(
           users: event.users!,
@@ -76,6 +77,12 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     if (state is SwipeLoaded) {
       List<User> users = List.from(state.users)..remove(event.user);
 
+      _databaseRepository.updateUserSwipe(
+        _authBloc.state.authUser!.uid,
+        event.user.id!,
+        false,
+      );
+
       if (users.isNotEmpty) {
         emit(
           SwipeLoaded(
@@ -93,12 +100,26 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   void _onSwipeRight(
     SwipeRight event,
     Emitter<SwipeState> emit,
-  ) {
+  ) async {
     final state = this.state;
     if (state is SwipeLoaded) {
+      String userId = _authBloc.state.authUser!.uid;
       List<User> users = List.from(state.users)..remove(event.user);
 
-      if (users.isNotEmpty) {
+      _databaseRepository.updateUserSwipe(
+        userId,
+        event.user.id!,
+        true,
+      );
+
+      if (event.user.swipeRight!.contains(userId)) {
+        await _databaseRepository.updateUserMatch(userId, event.user.id!);
+        emit(
+          SwipeLoaded(
+            users: users,
+          ),
+        );
+      } else if (users.isNotEmpty) {
         emit(
           SwipeLoaded(
             users: users,

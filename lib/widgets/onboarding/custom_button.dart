@@ -32,8 +32,12 @@ class CustomButton extends StatelessWidget {
           var suCon = context.read<SignUpCubit>();
           var onCon = context.read<OnboardingBloc>();
 
-          if (tabController.index == 5) {
-            Navigator.pushNamed(context, '/');
+          if (tabController.index == 6) {
+            // Navigator.pushNamed(context, '/');
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              '/',
+              (route) => false,
+            );
           } else {
             tabController.animateTo(tabController.index + 1);
           }
@@ -43,6 +47,9 @@ class CustomButton extends StatelessWidget {
 
             User user = User.empty.copyWith(
               id: suCon.state.user!.uid,
+              name: 'Waldo',
+              interests: ['Water'],
+              jobTitle: 'Sex Worker',
             );
 
             onCon.add(

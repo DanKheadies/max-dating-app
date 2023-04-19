@@ -17,12 +17,19 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Stream<List<User>> getUsers(
-    String userId,
-    String gender,
+    User user,
   ) {
+    List<String> userFilter = List.from(user.swipeLeft!)
+      ..addAll(user.swipeRight!)
+      ..add(user.id!);
+
     return _firebaseFirestore
         .collection('users')
-        .where('gender', isNotEqualTo: gender)
+        .where('gender', isEqualTo: 'Female')
+        .where(
+          FieldPath.documentId,
+          whereNotIn: userFilter,
+        )
         .snapshots()
         .map((snap) {
       return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
@@ -50,13 +57,45 @@ class DatabaseRepository extends BaseDatabaseRepository {
   }
 
   @override
-  Future<void> updateUser(User user) {
+  Future<void> updateUser(User user) async {
     return _firebaseFirestore
         .collection('users')
         .doc(user.id)
-        .update(user.toMap())
-        .then(
-          (value) => (value) => print('User document updated.'),
-        );
+        .update(user.toMap());
+    // .then(
+    //   (value) => (value) => print('User document updated.'),
+    // );
+  }
+
+  @override
+  Future<void> updateUserSwipe(
+    String userId,
+    String matchId,
+    bool isSwipeRight,
+  ) async {
+    if (isSwipeRight) {
+      await _firebaseFirestore.collection('users').doc(userId).update({
+        'swipeRight': FieldValue.arrayUnion([matchId]),
+      });
+    } else {
+      await _firebaseFirestore.collection('users').doc(userId).update({
+        'swipeLeft': FieldValue.arrayUnion([matchId]),
+      });
+    }
+  }
+
+  @override
+  Future<void> updateUserMatch(
+    String userId,
+    String matchId,
+  ) async {
+    // Update the current user document
+    await _firebaseFirestore.collection('users').doc(userId).update({
+      'matches': FieldValue.arrayUnion([matchId]),
+    });
+    // Add the match in the other user document too
+    await _firebaseFirestore.collection('users').doc(matchId).update({
+      'matches': FieldValue.arrayUnion([userId]),
+    });
   }
 }

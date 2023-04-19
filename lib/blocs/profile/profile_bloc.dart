@@ -30,7 +30,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         if (state.user != null) {
           add(
             LoadProfile(
-              userId: state.user!.uid,
+              userId: state.authUser!.uid,
             ),
           );
         }

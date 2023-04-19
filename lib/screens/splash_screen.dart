@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/screens/screens.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
 
   static Route route() {
@@ -20,11 +20,24 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 
   @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    print('init splash');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
+          // TODO: not running after completed user registration b/c timing
+          // Prob better to check the signup or login cubit?
           print('listening..');
           print(state.status);
           if (state.status == AuthStatus.unauthenticated) {
