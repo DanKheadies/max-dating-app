@@ -35,12 +35,15 @@ class _SplashScreenState extends State<SplashScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
+        // listenWhen: (previous, current) =>
+        //     previous.authUser != current.authUser,
         listener: (context, state) {
           // TODO: not running after completed user registration b/c timing
           // Prob better to check the signup or login cubit?
           print('listening..');
           print(state.status);
-          if (state.status == AuthStatus.unauthenticated) {
+          if (state.status == AuthStatus.unauthenticated ||
+              state.status == AuthStatus.unknown) {
             Timer(
               const Duration(milliseconds: 1000),
               // () => Navigator.of(context).pushNamed(

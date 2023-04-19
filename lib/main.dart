@@ -49,6 +49,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => MatchBloc(
+              databaseRepository: context.read<DatabaseRepository>(),
+            ),
+          ),
+          BlocProvider(
             create: (context) => OnboardingBloc(
               databaseRepository: context.read<DatabaseRepository>(),
               storageRepository: context.read<StorageRepository>(),

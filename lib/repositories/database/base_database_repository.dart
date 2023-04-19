@@ -3,6 +3,7 @@ import 'package:max_dating_app/models/models.dart';
 abstract class BaseDatabaseRepository {
   Stream<User> getUser(String userId);
   Stream<List<User>> getUsers(User user);
+  Stream<List<Match>> getMatches(User user);
   Future<void> createUser(User user);
   Future<void> updateUser(User user);
   Future<void> updateUserPictures(

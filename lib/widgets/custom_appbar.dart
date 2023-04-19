@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:max_dating_app/screens/screens.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
@@ -44,7 +45,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           ),
         ],
       ),
-      // automaticallyImplyLeading: false,
       actions: hasActions
           ? [
               IconButton(
@@ -52,35 +52,25 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   Icons.message,
                   color: Theme.of(context).primaryColor,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pushNamed(MatchesScreen.routeName);
+                },
               ),
               IconButton(
                 icon: Icon(
                   title == 'PROFILE' ? Icons.person_outline : Icons.person,
-                  // Icons.person,
                   color: Theme.of(context).primaryColor,
                 ),
                 enableFeedback: title == 'PROFILE' ? false : true,
                 onPressed: () {
                   title == 'PROFILE'
                       ? () {}
-                      : Navigator.pushNamed(
-                          context,
-                          '/profile',
-                        );
+                      : Navigator.of(context)
+                          .pushNamed(ProfileScreen.routeName);
                 },
               ),
             ]
           : [],
-      // actions: [
-      //   IconButton(
-      //     icon: Icon(
-      //       Icons.person_outline,
-      //       color: Theme.of(context).primaryColor,
-      //     ),
-      //     onPressed: () {},
-      //   ),
-      // ],
     );
   }
 

@@ -43,7 +43,7 @@ class CustomButton extends StatelessWidget {
           }
 
           if (tabController.index == 2) {
-            await context.read<SignUpCubit>().signUpWithCredentials();
+            await suCon.signUpWithCredentials();
 
             User user = User.empty.copyWith(
               id: suCon.state.user!.uid,
