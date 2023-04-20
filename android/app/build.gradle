@@ -21,6 +21,11 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+def gmpKey = localProperties.getProperty('segment.gmpKey')
+if (gmpKey == null) {
+    gmpKey = "no_key"
+}
+
 apply plugin: 'com.android.application'
 // START: FlutterFire Configuration
 apply plugin: 'com.google.gms.google-services'
@@ -54,6 +59,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders += [gmpKey: gmpKey]
     }
 
     buildTypes {

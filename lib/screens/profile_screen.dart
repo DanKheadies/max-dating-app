@@ -125,7 +125,7 @@ class ProfileScreen extends StatelessWidget {
                           icon: Icons.edit,
                         ),
                         Text(
-                          state.user.location,
+                          state.user.location!.name,
                           style:
                               Theme.of(context).textTheme.bodyLarge!.copyWith(
                                     height: 1.5,

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 
 class SplashScreen extends StatefulWidget {

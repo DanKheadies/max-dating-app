@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:max_dating_app/screens/screens.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
@@ -67,6 +70,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                       ? () {}
                       : Navigator.of(context)
                           .pushNamed(ProfileScreen.routeName);
+
+                  // RepositoryProvider.of<AuthRepository>(context).signOut();
                 },
               ),
             ]
