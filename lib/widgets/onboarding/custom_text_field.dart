@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
+  final String? hint;
+  final String initialValue;
+  final EdgeInsets padding;
   final Function(bool)? onFocusChanged;
   final Function(String)? onChanged;
-  final String hint;
 
   const CustomTextField({
     super.key,
+    this.hint = '',
+    this.initialValue = '',
+    this.padding = const EdgeInsets.symmetric(horizontal: 20),
     this.onFocusChanged,
     this.onChanged,
-    required this.hint,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: padding,
       child: Focus(
         onFocusChange: onFocusChanged ?? (_) {},
-        child: TextField(
+        child: TextFormField(
+          initialValue: initialValue,
           decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,

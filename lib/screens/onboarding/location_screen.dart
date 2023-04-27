@@ -43,24 +43,24 @@ class LocationScreen extends StatelessWidget {
                     CustomTextField(
                       hint: 'ENTER YOUR LOCATION',
                       onChanged: (value) {
-                        print('location change');
+                        // print('location change');
                         Location location = state.user.location!.copyWith(
                           name: value,
                         );
                         context.read<OnboardingBloc>().add(
-                              UpdateUserLocation(
+                              SetUserLocation(
                                 location: location,
                               ),
                             );
                       },
                       onFocusChanged: (hasFocus) {
                         if (hasFocus) {
-                          print('has focus');
+                          // print('has focus');
                           return;
                         } else {
-                          print('lost focus');
+                          // print('lost focus');
                           context.read<OnboardingBloc>().add(
-                                UpdateUserLocation(
+                                SetUserLocation(
                                   isUpdateComplete: true,
                                   location: state.user.location,
                                 ),
@@ -72,15 +72,17 @@ class LocationScreen extends StatelessWidget {
                     // Expanded(
                     SizedBox(
                       // height: 200,
-                      height: MediaQuery.of(context).size.height / 2,
+                      // height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.width,
                       // width: 200,
-                      width: MediaQuery.of(context).size.height - 100,
+                      // width: MediaQuery.of(context).size.height - 100,
+                      width: MediaQuery.of(context).size.width,
                       child: GoogleMap(
                         myLocationEnabled: true,
                         myLocationButtonEnabled: false,
                         onMapCreated: (GoogleMapController controller) {
                           context.read<OnboardingBloc>().add(
-                                UpdateUserLocation(
+                                SetUserLocation(
                                   controller: controller,
                                 ),
                               );
@@ -90,8 +92,8 @@ class LocationScreen extends StatelessWidget {
                           zoom: 10,
                           target: LatLng(
                             // Not picking up user's init location
-                            state.user.location!.lat,
-                            state.user.location!.lon,
+                            state.user.location!.lat.toDouble(),
+                            state.user.location!.lon.toDouble(),
                           ),
                         ),
                       ),

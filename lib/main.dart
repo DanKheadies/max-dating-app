@@ -68,6 +68,7 @@ class MyApp extends StatelessWidget {
               // authBloc: context.read<AuthBloc>(),
               authBloc: BlocProvider.of<AuthBloc>(context),
               databaseRepository: context.read<DatabaseRepository>(),
+              locationRepository: context.read<LocationRepository>(),
             )..add(
                 LoadProfile(
                   // userId: context.read<AuthBloc>().state.user!.uid,

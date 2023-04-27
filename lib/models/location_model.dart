@@ -4,8 +4,8 @@ import 'package:equatable/equatable.dart';
 class Location extends Equatable {
   final String placeId;
   final String name;
-  final double lat;
-  final double lon;
+  final num lat;
+  final num lon;
 
   const Location({
     this.placeId = '',
@@ -22,8 +22,8 @@ class Location extends Equatable {
   Location copyWith({
     String? placeId,
     String? name,
-    double? lat,
-    double? lon,
+    num? lat,
+    num? lon,
   }) {
     // print('location model copyWith');
     return Location(
@@ -37,15 +37,30 @@ class Location extends Equatable {
   factory Location.fromJson(Map<String, dynamic> json) {
     // print('location model fromJson');
     // print(json);
-    double tempLat = 0;
-    double tempLon = 0;
-
-    return Location(
-      placeId: json['place_id'] ?? '',
-      name: json['name'] ?? '',
-      lat: tempLat,
-      lon: tempLon,
-    );
+    print('dank');
+    print(json.keys);
+    if (json.keys.contains('place_id')) {
+      print('place_id');
+      print(json['place_id']);
+      print(json['name']);
+      print(json['geometry']);
+      print(json['geometry']['location']);
+      print(json['geometry']['location']['lat']);
+      print(json['geometry']['location']['lng']);
+      return Location(
+        placeId: json['place_id'],
+        name: json['name'],
+        lat: json['geometry']['location']['lat'],
+        lon: json['geometry']['location']['lng'],
+      );
+    } else {
+      return Location(
+        placeId: json['placeId'],
+        name: json['name'],
+        lat: json['lat'],
+        lon: json['lon'],
+      );
+    }
   }
 
   factory Location.fromSnapshot(Map<String, dynamic> json) {

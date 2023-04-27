@@ -38,8 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
         // NOTE: w/ no listenWhen, it autofires listener
-        // listenWhen: (previous, current) =>
-        //     previous.authUser != current.authUser,
+        listenWhen: (previous, current) =>
+            previous.authUser != current.authUser,
         // true,
         listener: (context, state) {
           // TODO: not running after completed user registration b/c timing

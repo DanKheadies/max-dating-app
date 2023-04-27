@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/models/location_model.dart';
 // import 'package:max_dating_app/models/models.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
@@ -15,8 +16,19 @@ class ProfileScreen extends StatelessWidget {
         builder: (context) {
           return BlocProvider.of<AuthBloc>(context).state.status ==
                   AuthStatus.unauthenticated
-              ? const OnboardingScreen()
-              : const ProfileScreen();
+              ? const LoginScreen()
+              : BlocProvider(
+                  create: (context) => ProfileBloc(
+                    authBloc: BlocProvider.of<AuthBloc>(context),
+                    databaseRepository: context.read<DatabaseRepository>(),
+                    locationRepository: context.read<LocationRepository>(),
+                  )..add(
+                      LoadProfile(
+                        userId: context.read<AuthBloc>().state.authUser!.uid,
+                      ),
+                    ),
+                  child: const ProfileScreen(),
+                );
         });
   }
 
@@ -38,6 +50,7 @@ class ProfileScreen extends StatelessWidget {
             }
             if (state is ProfileLoaded) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
                   UserImage.medium(
@@ -79,87 +92,107 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                   Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomElevatedButton(
+                          text: 'View',
+                          beginColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.primary,
+                          endColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.secondary,
+                          textColor: state.isEditingOn
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.white,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  SaveProfile(
+                                    user: state.user,
+                                  ),
+                                );
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        CustomElevatedButton(
+                          text: 'Edit',
+                          beginColor: state.isEditingOn
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.white,
+                          endColor: state.isEditingOn
+                              ? Theme.of(context).colorScheme.secondary
+                              : Colors.white,
+                          textColor: state.isEditingOn
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.primary,
+                          width: MediaQuery.of(context).size.width * 0.45,
+                          onPressed: () {
+                            context.read<ProfileBloc>().add(
+                                  const EditProfile(
+                                    isEditingOn: true,
+                                  ),
+                                );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const TitleWithIcon(
+                        ProfileTextField(
                           title: 'Biography',
-                          icon: Icons.edit,
-                        ),
-                        Text(
-                          state.user.bio,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    height: 1.5,
+                          value: state.user.bio,
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: state.user.copyWith(
+                                      bio: value,
+                                    ),
                                   ),
-                        ),
-                        const TitleWithIcon(
-                          title: 'Pictures',
-                          icon: Icons.edit,
-                        ),
-                        SizedBox(
-                          height: 125,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.user.imageUrls.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 5,
-                                ),
-                                child: UserImage.small(
-                                  width: 100,
-                                  url: state.user.imageUrls[index],
-                                  border: Border.all(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        const TitleWithIcon(
-                          title: 'Location',
-                          icon: Icons.edit,
-                        ),
-                        Text(
-                          state.user.location!.name,
-                          style:
-                              Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                    height: 1.5,
-                                  ),
-                        ),
-                        const TitleWithIcon(
-                          title: 'Interest',
-                          icon: Icons.edit,
-                        ),
-                        Row(
-                          children: [
-                            CustomTextContainer(
-                              text: state.user.interests[0],
-                            ),
-                          ],
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            RepositoryProvider.of<AuthRepository>(context)
-                                .signOut();
-                            Navigator.pushNamed(context, '/');
+                                );
                           },
-                          child: Center(
-                            child: Text(
-                              'Sign Out',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall!
-                                  .copyWith(
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                            ),
-                          ),
                         ),
+                        ProfileTextField(
+                          title: 'Age',
+                          value: '${state.user.age}',
+                          onChanged: (value) {
+                            if (value == null || value == '') return;
+
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: state.user.copyWith(
+                                      age: int.parse(value),
+                                    ),
+                                  ),
+                                );
+                          },
+                        ),
+                        ProfileTextField(
+                          title: 'Job Title',
+                          value: state.user.jobTitle,
+                          onChanged: (value) {
+                            context.read<ProfileBloc>().add(
+                                  UpdateUserProfile(
+                                    user: state.user.copyWith(
+                                      jobTitle: value,
+                                    ),
+                                  ),
+                                );
+                          },
+                        ),
+                        const ProfilePictures(),
+                        const ProfileInterests(),
+                        ProfileLocation(
+                          title: 'Location',
+                          value: state.user.location!.name,
+                        ),
+                        const SignOut(),
                       ],
                     ),
                   ),
@@ -173,34 +206,6 @@ class ProfileScreen extends StatelessWidget {
           },
         ),
       ),
-    );
-  }
-}
-
-class TitleWithIcon extends StatelessWidget {
-  final String title;
-  final IconData icon;
-
-  const TitleWithIcon({
-    super.key,
-    required this.title,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.displaySmall,
-        ),
-        IconButton(
-          icon: Icon(icon),
-          onPressed: () {},
-        ),
-      ],
     );
   }
 }
