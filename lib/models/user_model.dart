@@ -64,14 +64,15 @@ class User extends Equatable {
   );
 
   static User fromSnapshot(DocumentSnapshot snap) {
+    // print('user mode fromSnapshot');
+    // print(snap['location']);
     List<String> swipeLeftList =
         (snap['swipeLeft'] as List).map((swipe) => swipe as String).toList();
     List<String> swipeRightList =
         (snap['swipeRight'] as List).map((swipe) => swipe as String).toList();
     List<String> matchesList =
         (snap['matches'] as List).map((swipe) => swipe as String).toList();
-    // print('taco');
-    // print(snap['name']);
+
     User user = User(
       // id: snap['id'],
       id: snap.id,
@@ -84,7 +85,8 @@ class User extends Equatable {
       jobTitle: snap['jobTitle'],
       // location: snap['location'],
       // location: Location.fromJson(snap['location']),
-      location: Location.initialLocation,
+      location: Location.fromSnapshot(snap['location']),
+      // location: Location.initialLocation,
       swipeLeft: swipeLeftList,
       swipeRight: swipeRightList,
       matches: matchesList,
@@ -94,6 +96,8 @@ class User extends Equatable {
   }
 
   Map<String, dynamic> toMap() {
+    // print('user model toMap');
+    // print(location);
     return {
       'name': name,
       'age': age,
@@ -123,6 +127,7 @@ class User extends Equatable {
     List<String>? swipeRight,
     List<String>? matches,
   }) {
+    // print('user model copyWith');
     return User(
       id: id ?? this.id,
       name: name ?? this.name,

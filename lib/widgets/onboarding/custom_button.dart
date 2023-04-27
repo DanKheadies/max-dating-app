@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:max_dating_app/cubits/cubits.dart';
 import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/cubits/cubits.dart';
 import 'package:max_dating_app/models/models.dart';
+import 'package:max_dating_app/screens/screens.dart';
 
 class CustomButton extends StatelessWidget {
   final TabController tabController;
@@ -33,9 +34,8 @@ class CustomButton extends StatelessWidget {
           var onCon = context.read<OnboardingBloc>();
 
           if (tabController.index == 6) {
-            // Navigator.pushNamed(context, '/');
             Navigator.of(context).pushNamedAndRemoveUntil(
-              '/',
+              SplashScreen.routeName,
               (route) => false,
             );
           } else {

@@ -48,6 +48,7 @@ class OnboardingScreen extends StatelessWidget {
                 LocationScreen(tabController: tabController),
               ],
             ),
+            resizeToAvoidBottomInset: false,
           );
         },
       ),

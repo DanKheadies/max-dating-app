@@ -42,19 +42,8 @@ class LocationScreen extends StatelessWidget {
                     ),
                     CustomTextField(
                       hint: 'ENTER YOUR LOCATION',
-                      onFocusChanged: (hasFocus) {
-                        if (hasFocus) {
-                          return;
-                        } else {
-                          context.read<OnboardingBloc>().add(
-                                UpdateUserLocation(
-                                  isUpdateComplete: true,
-                                  location: state.user.location,
-                                ),
-                              );
-                        }
-                      },
                       onChanged: (value) {
+                        print('location change');
                         Location location = state.user.location!.copyWith(
                           name: value,
                         );
@@ -63,6 +52,20 @@ class LocationScreen extends StatelessWidget {
                                 location: location,
                               ),
                             );
+                      },
+                      onFocusChanged: (hasFocus) {
+                        if (hasFocus) {
+                          print('has focus');
+                          return;
+                        } else {
+                          print('lost focus');
+                          context.read<OnboardingBloc>().add(
+                                UpdateUserLocation(
+                                  isUpdateComplete: true,
+                                  location: state.user.location,
+                                ),
+                              );
+                        }
                       },
                     ),
                     const SizedBox(height: 10),

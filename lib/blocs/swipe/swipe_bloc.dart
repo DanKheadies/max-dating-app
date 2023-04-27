@@ -42,8 +42,9 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     LoadUsers event,
     Emitter<SwipeState> emit,
   ) {
+    print('load users (swipe bloc)');
     _databaseRepository.getUsersToSwipe(event.user).listen((users) {
-      print('Loading Users: $users');
+      print('Loading Users via Swipe bloc: $users');
       add(
         UpdateHome(
           users: users,
@@ -56,6 +57,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     UpdateHome event,
     Emitter<SwipeState> emit,
   ) {
+    print('update home (swipe bloc)');
     if (event.users!.isNotEmpty) {
       emit(
         SwipeLoaded(

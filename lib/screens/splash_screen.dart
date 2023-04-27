@@ -29,6 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     print('init splash');
+    // RepositoryProvider.of<AuthRepository>(context).signOut();
   }
 
   @override
@@ -36,8 +37,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return WillPopScope(
       onWillPop: () async => false,
       child: BlocListener<AuthBloc, AuthState>(
+        // NOTE: w/ no listenWhen, it autofires listener
         // listenWhen: (previous, current) =>
         //     previous.authUser != current.authUser,
+        // true,
         listener: (context, state) {
           // TODO: not running after completed user registration b/c timing
           // Prob better to check the signup or login cubit?
@@ -59,10 +62,13 @@ class _SplashScreenState extends State<SplashScreen> {
           } else if (state.status == AuthStatus.authenticated) {
             Timer(
               const Duration(milliseconds: 1000),
-              () => Navigator.of(context).pushNamedAndRemoveUntil(
+              // () => Navigator.of(context).pushNamedAndRemoveUntil(
+              //   HomeScreen.routeName,
+              //   ModalRoute.withName('/home'),
+              //   // (route) => false,
+              // ),
+              () => Navigator.of(context).pushNamed(
                 HomeScreen.routeName,
-                ModalRoute.withName('/home'),
-                // (route) => false,
               ),
             );
           }

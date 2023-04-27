@@ -47,6 +47,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     Emitter<OnboardingState> emit,
   ) {
     final state = this.state;
+    print('update user (ob bloc)');
     if (state is OnboardingLoaded) {
       _databaseRepository.updateUser(event.user);
       emit(
@@ -82,6 +83,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     Emitter<OnboardingState> emit,
   ) async {
     final state = this.state as OnboardingLoaded;
+    // print('update user location (ob bloc)');
 
     if (event.isUpdateComplete && event.location != null) {
       print('Getting the location with the Places API');
@@ -97,8 +99,10 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
           ),
         ),
       );
-
+      print(state.user.id);
       _databaseRepository.getUser(state.user.id!).listen((user) {
+        // print('db get user (ob bloc)');
+        // print(user.id);
         add(
           UpdateUser(
             user: state.user.copyWith(
@@ -108,6 +112,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
         );
       });
     } else {
+      // print('not complete or no location (ob bloc)');
       emit(
         OnboardingLoaded(
           user: state.user.copyWith(
