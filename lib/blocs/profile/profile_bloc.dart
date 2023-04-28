@@ -106,7 +106,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ) {
     final state = this.state;
     if (state is ProfileLoaded) {
-      print(event.user.location);
       emit(
         ProfileLoaded(
           user: event.user,

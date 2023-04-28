@@ -39,6 +39,14 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'PROFILE',
+        actionsIcons: [
+          Icons.message,
+          Icons.settings,
+        ],
+        actionsRoutes: [
+          MatchesScreen.routeName,
+          SettingsScreen.routeName,
+        ],
       ),
       body: SingleChildScrollView(
         child: BlocBuilder<ProfileBloc, ProfileState>(

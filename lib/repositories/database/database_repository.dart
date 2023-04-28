@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'package:max_dating_app/models/models.dart';
@@ -20,20 +21,12 @@ class DatabaseRepository extends BaseDatabaseRepository {
   Stream<List<User>> getUsers(
     User user,
   ) {
-    // List<String> userFilter = List.from(user.swipeLeft!)
-    //   ..addAll(user.swipeRight!)
-    //   ..add(user.id!);
-
     return _firebaseFirestore
         .collection('users')
         .where(
           'gender',
-          isEqualTo: selectGender(user),
+          whereIn: selectGender(user),
         )
-        // .where(
-        //   FieldPath.documentId,
-        //   whereNotIn: userFilter,
-        // )
         .snapshots()
         .map((snap) {
       return snap.docs.map((doc) => User.fromSnapshot(doc)).toList();
@@ -50,15 +43,32 @@ class DatabaseRepository extends BaseDatabaseRepository {
         List<User> users,
       ) {
         return users.where((user) {
-          if (currentUser.swipeLeft!.contains(user.id)) {
-            return false;
-          } else if (currentUser.swipeRight!.contains(user.id)) {
-            return false;
-          } else if (currentUser.matches!.contains(user.id)) {
-            return false;
-          } else {
-            return true;
-          }
+          bool isCurrentUser = user.id == currentUser.id;
+          bool wasSwipedLeft = currentUser.swipeLeft!.contains(user.id);
+          bool wasSwipedRight = currentUser.swipeRight!.contains(user.id);
+          bool isMatch = currentUser.matches!.contains(user.id);
+          bool isWithinAgeRange =
+              user.age >= currentUser.ageRangePreference![0] &&
+                  user.age <= currentUser.ageRangePreference![1];
+          bool isWithinDistance =
+              getDistance(currentUser, user) <= currentUser.distancePreference;
+
+          // print('user: ${user.name}');
+          // print('isCurrentUser: $isCurrentUser');
+          // print('wasSwipedRight: $wasSwipedRight');
+          // print('wasSwipedLeft: $wasSwipedLeft');
+          // print('isMatch: $isMatch');
+          // print('isWithinAgeRange: $isWithinAgeRange');
+          // print('isWithinDistance: $isWithinDistance');
+
+          if (isCurrentUser) return false;
+          if (wasSwipedRight) return false;
+          if (wasSwipedLeft) return false;
+          if (isMatch) return false;
+          if (!isWithinAgeRange) return false;
+          if (!isWithinDistance) return false;
+
+          return true;
         }).toList();
       },
     );
@@ -66,25 +76,6 @@ class DatabaseRepository extends BaseDatabaseRepository {
 
   @override
   Stream<List<Match>> getMatches(User user) {
-    // List<String> userFilter = List.from(user.matches!)..add('0');
-
-    // return _firebaseFirestore
-    //     .collection('users')
-    //     // .where(
-    //     //   FieldPath.documentId,
-    //     //   whereIn: userFilter,
-    //     // )
-    //     .snapshots()
-    //     .map((snap) {
-    //   return snap.docs
-    //       .map(
-    //         (doc) => Match.fromSnapshot(
-    //           doc,
-    //           user.id!,
-    //         ),
-    //       )
-    //       .toList();
-    // });
     return Rx.combineLatest2(
       getUser(user.id!),
       getUsers(user),
@@ -168,7 +159,25 @@ class DatabaseRepository extends BaseDatabaseRepository {
     });
   }
 
+  getDistance(
+    User currentUser,
+    User user,
+  ) {
+    GeolocatorPlatform geolocator = GeolocatorPlatform.instance;
+    var distanceInKm = geolocator.distanceBetween(
+          currentUser.location!.lat.toDouble(),
+          currentUser.location!.lon.toDouble(),
+          user.location!.lat.toDouble(),
+          user.location!.lon.toDouble(),
+        ) ~/
+        1000;
+    return distanceInKm;
+  }
+
   selectGender(User user) {
-    return user.gender == 'Female' ? 'Male' : 'Female';
+    if (user.genderPreference == null) {
+      return ['Male', 'Female'];
+    }
+    return user.genderPreference;
   }
 }

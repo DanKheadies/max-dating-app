@@ -26,6 +26,8 @@ class AppRouter {
         return OnboardingScreen.route();
       case ProfileScreen.routeName:
         return ProfileScreen.route();
+      case SettingsScreen.routeName:
+        return SettingsScreen.route();
       case UserScreen.routeName:
         return UserScreen.route(
           user: settings.arguments as User,

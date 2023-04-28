@@ -12,6 +12,8 @@ class LoginScreen extends StatelessWidget {
     return MaterialPageRoute(
       settings: const RouteSettings(name: routeName),
       builder: (context) {
+        print('dank?');
+        print(BlocProvider.of<AuthBloc>(context).state.status);
         return BlocProvider.of<AuthBloc>(context).state.status ==
                 AuthStatus.authenticated
             ? const HomeScreen()

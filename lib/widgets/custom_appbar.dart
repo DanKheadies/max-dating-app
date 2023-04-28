@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/screens/screens.dart';
-import 'package:max_dating_app/repositories/repositories.dart';
+// import 'package:max_dating_app/repositories/repositories.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final bool hasActions;
+  final List<IconData> actionsIcons;
+  final List<String> actionsRoutes;
 
   const CustomAppBar({
     super.key,
     required this.title,
     this.hasActions = true,
+    this.actionsIcons = const [
+      Icons.message,
+      Icons.person,
+    ],
+    this.actionsRoutes = const [
+      MatchesScreen.routeName,
+      ProfileScreen.routeName,
+    ],
   });
 
   @override
@@ -26,7 +36,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           Expanded(
             child: InkWell(
               onTap: () {
-                title == 'PROFILE'
+                title == 'DISCOVER'
                     ? () {}
                     : Navigator.pushNamedAndRemoveUntil(
                         context,
@@ -34,6 +44,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                         (route) => false,
                       );
               },
+              enableFeedback: title == 'DISCOVER' ? false : true,
               child: SvgPicture.asset(
                 'assets/images/logo.svg',
                 height: 50,
@@ -53,26 +64,20 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           ? [
               IconButton(
                 icon: Icon(
-                  Icons.message,
+                  actionsIcons[0],
                   color: Theme.of(context).primaryColor,
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(MatchesScreen.routeName);
+                  Navigator.of(context).pushNamed(actionsRoutes[0]);
                 },
               ),
               IconButton(
                 icon: Icon(
-                  title == 'PROFILE' ? Icons.person_outline : Icons.person,
+                  actionsIcons[1],
                   color: Theme.of(context).primaryColor,
                 ),
-                enableFeedback: title == 'PROFILE' ? false : true,
                 onPressed: () {
-                  title == 'PROFILE'
-                      ? () {}
-                      : Navigator.of(context)
-                          .pushNamed(ProfileScreen.routeName);
-
-                  // RepositoryProvider.of<AuthRepository>(context).signOut();
+                  Navigator.of(context).pushNamed(actionsRoutes[1]);
                 },
               ),
             ]
