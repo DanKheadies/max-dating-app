@@ -57,13 +57,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
-            create: (context) => OnboardingBloc(
-              databaseRepository: context.read<DatabaseRepository>(),
-              locationRepository: context.read<LocationRepository>(),
-              storageRepository: context.read<StorageRepository>(),
-            ),
-          ),
-          BlocProvider(
             create: (context) => ProfileBloc(
               // authBloc: context.read<AuthBloc>(),
               authBloc: BlocProvider.of<AuthBloc>(context),
@@ -74,26 +67,6 @@ class MyApp extends StatelessWidget {
                   // userId: context.read<AuthBloc>().state.user!.uid,
                   userId:
                       BlocProvider.of<AuthBloc>(context).state.authUser!.uid,
-                ),
-              ),
-          ),
-          BlocProvider(
-            create: (context) => SignUpCubit(
-              authRepository: context.read<AuthRepository>(),
-            ),
-          ),
-          BlocProvider(
-            create: (context) => SwipeBloc(
-              // authBloc: context.read<AuthBloc>(),
-              authBloc: BlocProvider.of<AuthBloc>(context),
-              databaseRepository: context.read<DatabaseRepository>(),
-            )..add(
-                // TODO: is needed?
-                // LoadUsers(
-                //   userId:
-                //       BlocProvider.of<AuthBloc>(context).state.authUser!.uid,
-                LoadUsers(
-                  user: BlocProvider.of<AuthBloc>(context).state.user!,
                 ),
               ),
           ),

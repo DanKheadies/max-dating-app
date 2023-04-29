@@ -10,8 +10,10 @@ abstract class OnboardingEvent extends Equatable {
 
 class StartOnboarding extends OnboardingEvent {
   final User user;
+  final TabController tabController;
 
   const StartOnboarding({
+    required this.tabController,
     this.user = const User(
       id: '',
       name: '',
@@ -22,12 +24,36 @@ class StartOnboarding extends OnboardingEvent {
       bio: '',
       location: Location.initialLocation,
       jobTitle: '',
+      swipeLeft: [],
+      swipeRight: [],
+      matches: [],
+      genderPreference: [],
+      ageRangePreference: [18, 50],
+      distancePreference: 10,
     ),
+    // this.user = User.empty,
+  });
+
+  @override
+  List<Object?> get props => [
+        tabController,
+        user,
+      ];
+}
+
+class ContinueOnboarding extends OnboardingEvent {
+  final User user;
+  final bool isSignup;
+
+  const ContinueOnboarding({
+    required this.user,
+    this.isSignup = false,
   });
 
   @override
   List<Object?> get props => [
         user,
+        isSignup,
       ];
 }
 
@@ -62,19 +88,19 @@ class UpdateUserImages extends OnboardingEvent {
 
 class SetUserLocation extends OnboardingEvent {
   final Location? location;
-  final GoogleMapController? controller;
+  final GoogleMapController? mapController;
   final bool isUpdateComplete;
 
   const SetUserLocation({
     this.location,
-    this.controller,
+    this.mapController,
     this.isUpdateComplete = false,
   });
 
   @override
   List<Object?> get props => [
         location,
-        controller,
+        mapController,
         isUpdateComplete,
       ];
 }

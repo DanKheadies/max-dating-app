@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
+// import 'package:max_dating_app/widgets/widgets.dart';
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
@@ -90,6 +91,23 @@ class _SplashScreenState extends State<SplashScreen> {
                   Text(
                     'ARROW',
                     style: Theme.of(context).textTheme.displayLarge,
+                  ),
+                  const SizedBox(height: 20),
+                  // const SignOut(),
+                  TextButton(
+                    onPressed: () {
+                      RepositoryProvider.of<AuthRepository>(context).signOut();
+                      // Navigator.pushNamed(context, '/');
+                    },
+                    child: Center(
+                      child: Text(
+                        'Sign Out',
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                      ),
+                    ),
                   ),
                 ],
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
+import 'package:max_dating_app/repositories/repositories.dart';
 import 'package:max_dating_app/screens/screens.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
@@ -14,7 +15,13 @@ class HomeScreen extends StatelessWidget {
         return BlocProvider.of<AuthBloc>(context).state.status ==
                 AuthStatus.unauthenticated
             ? const OnboardingScreen()
-            : const HomeScreen();
+            : BlocProvider(
+                create: (context) => SwipeBloc(
+                  authBloc: context.read<AuthBloc>(),
+                  databaseRepository: context.read<DatabaseRepository>(),
+                )..add(LoadUsers()),
+                child: const HomeScreen(),
+              );
       },
     );
   }
@@ -256,9 +263,7 @@ class SwipeMatchedHomeScreen extends StatelessWidget {
               textColor: Colors.white,
               onPressed: () {
                 context.read<SwipeBloc>().add(
-                      LoadUsers(
-                        user: context.read<AuthBloc>().state.user!,
-                      ),
+                      LoadUsers(),
                     );
               },
             ),

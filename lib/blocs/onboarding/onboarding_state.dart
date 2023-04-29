@@ -12,16 +12,19 @@ class OnboardingLoading extends OnboardingState {}
 
 class OnboardingLoaded extends OnboardingState {
   final User user;
-  final GoogleMapController? controller;
+  final GoogleMapController? mapController;
+  final TabController tabController;
 
   const OnboardingLoaded({
     required this.user,
-    this.controller,
+    this.mapController,
+    required this.tabController,
   });
 
   @override
   List<Object?> get props => [
         user,
-        controller,
+        mapController,
+        tabController,
       ];
 }

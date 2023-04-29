@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
@@ -24,6 +25,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
         _storageRepository = storageRepository,
         super(OnboardingLoading()) {
     on<StartOnboarding>(_onStartOnboarding);
+    on<ContinueOnboarding>(_onContinueOnboarding);
     on<UpdateUser>(_onUpdateUser);
     on<UpdateUserImages>(_onUpdateUserImages);
     on<SetUserLocation>(_onSetUserLocation);
@@ -32,12 +34,31 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   void _onStartOnboarding(
     StartOnboarding event,
     Emitter<OnboardingState> emit,
+  ) {
+    emit(
+      OnboardingLoaded(
+        user: User.empty,
+        tabController: event.tabController,
+      ),
+    );
+  }
+
+  void _onContinueOnboarding(
+    ContinueOnboarding event,
+    Emitter<OnboardingState> emit,
   ) async {
-    await _databaseRepository.createUser(event.user);
+    final state = this.state as OnboardingLoaded;
+
+    if (event.isSignup) {
+      await _databaseRepository.createUser(event.user);
+    }
+
+    state.tabController.animateTo(state.tabController.index + 1);
 
     emit(
       OnboardingLoaded(
         user: event.user,
+        tabController: state.tabController,
       ),
     );
   }
@@ -47,12 +68,13 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     Emitter<OnboardingState> emit,
   ) {
     final state = this.state;
-    print('update user (ob bloc)');
+    // print('update user (ob bloc)');
     if (state is OnboardingLoaded) {
       _databaseRepository.updateUser(event.user);
       emit(
         OnboardingLoaded(
           user: event.user,
+          tabController: state.tabController,
         ),
       );
     }
@@ -65,7 +87,6 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     final state = this.state;
     if (state is OnboardingLoaded) {
       User user = state.user;
-
       await _storageRepository.uploadImage(user, event.image);
 
       _databaseRepository.getUser(user.id!).listen((user) {
@@ -91,7 +112,7 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
       final Location location =
           await _locationRepository.getLocation(event.location!.name);
 
-      state.controller!.animateCamera(
+      state.mapController!.animateCamera(
         CameraUpdate.newLatLng(
           LatLng(
             location.lat.toDouble(),
@@ -99,10 +120,8 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
           ),
         ),
       );
-      print(state.user.id);
+
       _databaseRepository.getUser(state.user.id!).listen((user) {
-        // print('db get user (ob bloc)');
-        // print(user.id);
         add(
           UpdateUser(
             user: state.user.copyWith(
@@ -118,7 +137,8 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
           user: state.user.copyWith(
             location: event.location,
           ),
-          controller: event.controller ?? state.controller,
+          mapController: event.mapController ?? state.mapController,
+          tabController: state.tabController,
         ),
       );
     }

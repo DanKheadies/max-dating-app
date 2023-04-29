@@ -51,6 +51,7 @@ class ProfileScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: BlocBuilder<ProfileBloc, ProfileState>(
           builder: (context, state) {
+            // TODO: takes a bit of time to load (?)
             if (state is ProfileLoading) {
               return const Center(
                 child: CircularProgressIndicator(),

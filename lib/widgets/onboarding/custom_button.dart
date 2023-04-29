@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:max_dating_app/blocs/blocs.dart';
-import 'package:max_dating_app/cubits/cubits.dart';
-import 'package:max_dating_app/models/models.dart';
-import 'package:max_dating_app/screens/screens.dart';
 
 class CustomButton extends StatelessWidget {
-  final TabController tabController;
   final String text;
+  final void Function()? onPressed;
 
   const CustomButton({
     super.key,
-    required this.tabController,
     required this.text,
+    this.onPressed,
   });
 
   @override
@@ -29,36 +23,7 @@ class CustomButton extends StatelessWidget {
         ),
       ),
       child: ElevatedButton(
-        onPressed: () async {
-          var suCon = context.read<SignUpCubit>();
-          var onCon = context.read<OnboardingBloc>();
-
-          if (tabController.index == 6) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              SplashScreen.routeName,
-              (route) => false,
-            );
-          } else {
-            tabController.animateTo(tabController.index + 1);
-          }
-
-          if (tabController.index == 2) {
-            await suCon.signUpWithCredentials();
-
-            User user = User.empty.copyWith(
-              id: suCon.state.user!.uid,
-              name: 'Waldo',
-              interests: ['Water'],
-              jobTitle: 'Sex Worker',
-            );
-
-            onCon.add(
-              StartOnboarding(
-                user: user,
-              ),
-            );
-          }
-        },
+        onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           elevation: 0,
           backgroundColor: Colors.transparent,

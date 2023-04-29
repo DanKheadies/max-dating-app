@@ -70,7 +70,7 @@ class User extends Equatable {
     swipeLeft: [],
     swipeRight: [],
     matches: [],
-    genderPreference: ['Female'],
+    genderPreference: [],
     ageRangePreference: [18, 50],
     distancePreference: 10,
   );

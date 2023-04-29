@@ -30,9 +30,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     _authSubscription = _authBloc.stream.listen((state) {
       if (state.status == AuthStatus.authenticated) {
         add(
-          LoadUsers(
-            user: state.user!,
-          ),
+          LoadUsers(),
         );
       }
     });
@@ -42,22 +40,22 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
     LoadUsers event,
     Emitter<SwipeState> emit,
   ) {
-    // print('load users (swipe bloc)');
-    _databaseRepository.getUsersToSwipe(event.user).listen((users) {
-      // print('Loading Users via Swipe bloc: $users');
-      add(
-        UpdateHome(
-          users: users,
-        ),
-      );
-    });
+    if (_authBloc.state.user != null) {
+      User currentUser = _authBloc.state.user!;
+      _databaseRepository.getUsersToSwipe(currentUser).listen((users) {
+        add(
+          UpdateHome(
+            users: users,
+          ),
+        );
+      });
+    }
   }
 
   void _onUpdateHome(
     UpdateHome event,
     Emitter<SwipeState> emit,
   ) {
-    // print('update home (swipe bloc)');
     if (event.users!.isNotEmpty) {
       emit(
         SwipeLoaded(
@@ -77,7 +75,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   ) async {
     final state = this.state;
     if (state is SwipeLoaded) {
-      String userId = _authBloc.state.authUser!.uid;
+      // String userId = _authBloc.state.authUser!.uid;
       List<User> users = List.from(state.users)..remove(event.user);
 
       await _databaseRepository.updateUserSwipe(
@@ -86,17 +84,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
         false,
       );
 
-      if (event.user.swipeRight!.contains(userId)) {
-        await _databaseRepository.updateUserMatch(
-          userId,
-          event.user.id!,
-        );
-        emit(
-          SwipeMatched(
-            user: event.user,
-          ),
-        );
-      } else if (users.isNotEmpty) {
+      if (users.isNotEmpty) {
         emit(
           SwipeLoaded(
             users: users,
@@ -116,23 +104,15 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
   ) async {
     final state = this.state;
     if (state is SwipeLoaded) {
-      String userId = _authBloc.state.authUser!.uid;
       List<User> users = List.from(state.users)..remove(event.user);
 
       _databaseRepository.updateUserSwipe(
-        userId,
+        _authBloc.state.authUser!.uid,
         event.user.id!,
         true,
       );
 
-      if (event.user.swipeRight!.contains(userId)) {
-        await _databaseRepository.updateUserMatch(userId, event.user.id!);
-        emit(
-          SwipeLoaded(
-            users: users,
-          ),
-        );
-      } else if (users.isNotEmpty) {
+      if (users.isNotEmpty) {
         emit(
           SwipeLoaded(
             users: users,
