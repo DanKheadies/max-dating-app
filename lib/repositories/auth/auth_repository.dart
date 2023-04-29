@@ -27,6 +27,8 @@ class AuthRepository extends BaseAuthRepository {
 
       final user = credential.user;
       return user;
+    } on auth.FirebaseAuthException catch (err) {
+      throw Exception(err.message);
     } catch (_) {
       print(_);
     }
@@ -45,7 +47,11 @@ class AuthRepository extends BaseAuthRepository {
         email: email,
         password: password,
       );
-    } catch (_) {}
+    } on auth.FirebaseAuthException catch (err) {
+      throw Exception(err.message);
+    } catch (_) {
+      print('err: $_');
+    }
   }
 
   @override

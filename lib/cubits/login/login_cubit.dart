@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:form_inputs/form_inputs.dart';
+import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
 
 import 'package:max_dating_app/repositories/repositories.dart';
@@ -16,40 +18,64 @@ class LoginCubit extends Cubit<LoginState> {
         super(LoginState.initial());
 
   void emailChanged(String value) {
+    final email = Email.dirty(value);
+
     emit(
       state.copyWith(
-        email: value,
-        status: LoginStatus.initial,
+        email: email,
+        status: Formz.validate([email, state.password])
+            ? FormzSubmissionStatus.initial
+            : FormzSubmissionStatus.failure,
       ),
     );
   }
 
   void passwordChanged(String value) {
+    final password = Password.dirty(value);
+
     emit(
       state.copyWith(
-        password: value,
-        status: LoginStatus.initial,
+        password: password,
+        status: Formz.validate([state.email, password])
+            ? FormzSubmissionStatus.initial
+            : FormzSubmissionStatus.failure,
       ),
     );
   }
 
   Future<void> logInWithCredentials() async {
-    if (state.status == LoginStatus.submitting) return;
+    if (state.status == FormzSubmissionStatus.success) return;
+
     emit(
       state.copyWith(
-        status: LoginStatus.submitting,
+        status: FormzSubmissionStatus.inProgress,
       ),
     );
     try {
       await _authRepository.logInWithEmailAndPassword(
-        email: state.email,
-        password: state.password,
+        email: state.email.value,
+        password: state.password.value,
       );
       emit(
         state.copyWith(
-          status: LoginStatus.success,
+          status: FormzSubmissionStatus.success,
         ),
       );
-    } catch (_) {}
+    } on Exception catch (err) {
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.canceled,
+          errorMessage: err.toString(),
+        ),
+      );
+    } catch (err) {
+      print('err: $err');
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.canceled,
+          errorMessage: err.toString(),
+        ),
+      );
+    }
   }
 }

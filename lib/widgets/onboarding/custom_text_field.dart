@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String? hint;
-  final String initialValue;
+  final String? initialValue;
+  final String? errorText;
   final EdgeInsets padding;
   final Function(bool)? onFocusChanged;
   final Function(String)? onChanged;
@@ -11,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     this.hint = '',
     this.initialValue = '',
+    this.errorText,
     this.padding = const EdgeInsets.symmetric(horizontal: 20),
     this.onFocusChanged,
     this.onChanged,
@@ -28,6 +30,7 @@ class CustomTextField extends StatelessWidget {
             fillColor: Colors.white,
             filled: true,
             hintText: hint,
+            errorText: errorText,
             contentPadding: const EdgeInsets.only(
               bottom: 5,
               top: 12.5,
