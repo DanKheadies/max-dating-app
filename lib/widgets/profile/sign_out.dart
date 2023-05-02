@@ -22,7 +22,7 @@ class SignOut extends StatelessWidget {
                   var navCon = Navigator.of(context);
 
                   RepositoryProvider.of<AuthRepository>(context).signOut();
-                  // Navigator.pushNamed(context, '/');
+
                   navCon.pushNamedAndRemoveUntil(
                     LoginScreen.routeName,
                     (route) => false,

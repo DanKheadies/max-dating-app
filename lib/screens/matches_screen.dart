@@ -42,11 +42,13 @@ class MatchesScreen extends StatelessWidget {
             );
           }
           if (state is MatchLoaded) {
-            final inactiveMatches =
-                state.matches.where((match) => match.chat == null).toList();
+            final inactiveMatches = state.matches
+                .where((match) => match.chat.messages.isEmpty)
+                .toList();
 
-            final activeMatches =
-                state.matches.where((match) => match.chat != null).toList();
+            final activeMatches = state.matches
+                .where((match) => match.chat.messages.isNotEmpty)
+                .toList();
 
             return SingleChildScrollView(
               child: Padding(
@@ -58,7 +60,12 @@ class MatchesScreen extends StatelessWidget {
                       'Your Likes',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    MatchesList(inactiveMatches: inactiveMatches),
+                    inactiveMatches.isEmpty
+                        ? const Padding(
+                            padding: EdgeInsets.all(20),
+                            child: Text('Go back to swiping'),
+                          )
+                        : MatchesList(inactiveMatches: inactiveMatches),
                     const SizedBox(height: 10),
                     Text(
                       'Your Chats',
@@ -99,62 +106,6 @@ class MatchesScreen extends StatelessWidget {
           }
         },
       ),
-    );
-  }
-}
-
-class ChatsList extends StatelessWidget {
-  const ChatsList({
-    super.key,
-    required this.activeMatches,
-  });
-
-  final List<Match> activeMatches;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: activeMatches.length,
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/chat',
-              arguments: activeMatches[index],
-            );
-          },
-          child: Row(
-            children: [
-              UserImageSmall(
-                height: 75,
-                width: 75,
-                imageUrl: activeMatches[index].matchUser.imageUrls[0],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    activeMatches[index].matchUser.name,
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    activeMatches[index].chat.messages[0].message,
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    activeMatches[index].chat.messages[0].timeString,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }

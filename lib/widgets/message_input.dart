@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/models/models.dart';
 
 class MessageInput extends StatelessWidget {
@@ -12,6 +14,8 @@ class MessageInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
     return Container(
       padding: const EdgeInsets.all(20),
       child: Row(
@@ -24,12 +28,22 @@ class MessageInput extends StatelessWidget {
             child: IconButton(
               icon: const Icon(Icons.send_outlined),
               color: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                context.read<ChatBloc>().add(
+                      AddMessage(
+                        userId: match.userId,
+                        matchUserId: match.matchUser.id!,
+                        message: controller.text,
+                      ),
+                    );
+                controller.clear();
+              },
             ),
           ),
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              controller: controller,
+              decoration: const InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
                 hintText: 'Type here...',

@@ -67,9 +67,6 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
     UpdateUser event,
     Emitter<OnboardingState> emit,
   ) async {
-    // NOTE: this calls for UpdateUser's state and tab, but why matter?
-    // final state = this.state;
-    // print('update user (ob bloc)');
     // UPDATE: this is called multiple times as the Streams / repos listening
     // to the user account run this and notify those subs
     if (state is OnboardingLoaded) {

@@ -49,6 +49,7 @@ class SwipeBloc extends Bloc<SwipeEvent, SwipeState> {
       _databaseRepository.getUsersToSwipe(currentUser).listen((users) {
         // NOTE: running multiple times, Stream effect (?)
         // Runs UpdateHome (which triggers LoadUsers ?) below
+        // EX: on a swipe right w/ 3 users, this ran 12 times, i.e. 4x repeat (?)
         print('Load users');
         print(users.length);
         print(users);

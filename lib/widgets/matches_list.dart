@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:max_dating_app/models/models.dart';
+import 'package:max_dating_app/screens/chat_screen.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class MatchesList extends StatelessWidget {
@@ -20,18 +21,37 @@ class MatchesList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: inactiveMatches.length,
         itemBuilder: (context, index) {
-          return Column(
-            children: [
-              UserImageSmall(
-                height: 75,
-                width: 75,
-                imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
+          return InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                ChatScreen.routeName,
+                arguments: inactiveMatches[index],
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 10,
+                right: 10,
               ),
-              Text(
-                inactiveMatches[index].matchUser.name,
-                style: Theme.of(context).textTheme.headlineSmall,
+              child: Column(
+                children: [
+                  // UserImageSmall(
+                  //   height: 75,
+                  //   width: 75,
+                  //   imageUrl: inactiveMatches[index].matchUser.imageUrls[0],
+                  // ),
+                  UserImage.small(
+                    width: 70,
+                    height: 70,
+                    url: inactiveMatches[index].matchUser.imageUrls[0],
+                  ),
+                  Text(
+                    inactiveMatches[index].matchUser.name,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                ],
               ),
-            ],
+            ),
           );
         },
       ),

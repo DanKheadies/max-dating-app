@@ -1,3 +1,4 @@
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 
@@ -17,11 +18,19 @@ class Message extends Equatable {
   });
 
   factory Message.fromJson(Map<String, dynamic> json, {String? id}) {
+    // print('message from Json');
+    // print(json['dateTime']);
+    // print(json['dateTime'].toDate());
+    // print(DateFormat().parse(json['dateTime']));
+    // print(DateTime.parse(json['dateTime'].toDate().toString()));
+    // print(DateFormat('yyyy-MM-dd hh:mm:ss')
+    //     .parse(json['dateTime'].toDate().toString()));
+
     return Message(
       senderId: json['senderId'],
       receiverId: json['receiverId'],
       message: json['message'],
-      dateTime: json['dateTime'],
+      dateTime: json['dateTime'].toDate(),
       timeString: DateFormat('HH:mm').format(
         json['dateTime'].toDate(),
       ),
