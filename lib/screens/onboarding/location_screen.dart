@@ -45,6 +45,8 @@ class LocationScreen extends StatelessWidget {
               // TODO: location's placeId continues to toggle in / out on Firebase (?)
               // Happens after a refresh; stops when the app is quit (?)
               // Nope, keeps running..
+              // UPDATE: the UpdateUser keeps getting called in a loop where it
+              // contains and does not contain the placeId
               context.read<OnboardingBloc>().add(
                     SetUserLocation(
                       isUpdateComplete: true,

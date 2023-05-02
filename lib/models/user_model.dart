@@ -15,7 +15,7 @@ class User extends Equatable {
   final Location? location;
   final List<String>? swipeLeft;
   final List<String>? swipeRight;
-  final List<String>? matches;
+  final List<Map<String, dynamic>>? matches;
   final List<String>? genderPreference;
   final List<int>? ageRangePreference;
   final int? distancePreference;
@@ -82,8 +82,9 @@ class User extends Equatable {
         (snap['swipeLeft'] as List).map((swipe) => swipe as String).toList();
     List<String> swipeRightList =
         (snap['swipeRight'] as List).map((swipe) => swipe as String).toList();
-    List<String> matchesList =
-        (snap['matches'] as List).map((swipe) => swipe as String).toList();
+    List<Map<String, dynamic>> matchesList = (snap['matches'] as List)
+        .map((swipe) => swipe as Map<String, dynamic>)
+        .toList();
 
     var data = snap.data() as Map<String, dynamic>?;
 
@@ -167,7 +168,7 @@ class User extends Equatable {
     Location? location,
     List<String>? swipeLeft,
     List<String>? swipeRight,
-    List<String>? matches,
+    List<Map<String, dynamic>>? matches,
     List<String>? genderPreference,
     List<int>? ageRangePreference,
     int? distancePreference,

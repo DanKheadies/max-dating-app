@@ -5,34 +5,34 @@ import 'package:max_dating_app/models/models.dart';
 
 class Match extends Equatable {
   final String userId;
-  final User matchedUser;
-  final List<Chat>? chat;
+  final User matchUser;
+  final Chat chat;
 
   const Match({
     required this.userId,
-    required this.matchedUser,
-    this.chat,
+    required this.matchUser,
+    required this.chat,
   });
 
-  static Match fromSnapshot(
-    DocumentSnapshot snap,
-    String userId,
-  ) {
-    Match match = Match(
-      userId: userId,
-      matchedUser: User.fromSnapshot(snap),
-    );
-    return match;
-  }
+  // static Match fromSnapshot(
+  //   DocumentSnapshot snap,
+  //   String userId,
+  // ) {
+  //   Match match = Match(
+  //     userId: userId,
+  //     matchedUser: User.fromSnapshot(snap),
+  //   );
+  //   return match;
+  // }
 
   Match copyWith({
     String? userId,
-    User? matchedUser,
-    List<Chat>? chat,
+    User? matchUser,
+    Chat? chat,
   }) {
     return Match(
       userId: userId ?? this.userId,
-      matchedUser: matchedUser ?? this.matchedUser,
+      matchUser: matchUser ?? this.matchUser,
       chat: chat ?? this.chat,
     );
   }
@@ -40,52 +40,52 @@ class Match extends Equatable {
   @override
   List<Object?> get props => [
         userId,
-        matchedUser,
+        matchUser,
         chat,
       ];
 
-  static List<Match> matches = [
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-    Match(
-      userId: '1',
-      matchedUser: User.users[1],
-      chat: Chat.chats
-          .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
-          .toList(),
-    ),
-  ];
+  // static List<Match> matches = [
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  //   Match(
+  //     userId: '1',
+  //     matchedUser: User.users[1],
+  //     chat: Chat.chats
+  //         .where((chat) => chat.userId == 1 && chat.matchedUserId == 2)
+  //         .toList(),
+  //   ),
+  // ];
 }

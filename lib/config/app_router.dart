@@ -14,8 +14,8 @@ class AppRouter {
         return SplashScreen.route();
       case ChatScreen.routeName:
         return ChatScreen.route(
-            // userMatch: settings.arguments as Match,
-            );
+          match: settings.arguments as Match,
+        );
       case HomeScreen.routeName:
         return HomeScreen.route();
       case LoginScreen.routeName:

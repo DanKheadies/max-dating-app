@@ -17,69 +17,74 @@ class EmailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OnboardingLayout(
-      currentStep: 2,
-      onPressed: () async {
-        var onboardContext = context.read<OnboardingBloc>();
-        var signUpContext = context.read<SignUpCubit>();
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      builder: (context, signUpState) {
+        return OnboardingLayout(
+          currentStep: 2,
+          onPressed: () async {
+            var onboardContext = context.read<OnboardingBloc>();
+            var signUpContext = context.read<SignUpCubit>();
 
-        if (BlocProvider.of<SignUpCubit>(context).state.status ==
-            FormzSubmissionStatus.success) {
-          await context.read<SignUpCubit>().signUpWithCredentials();
-          onboardContext.add(
-            ContinueOnboarding(
-              isSignup: true,
-              user: User.empty.copyWith(
-                id: signUpContext.state.user!.uid,
-              ),
+            if (Formz.validate([signUpState.email, signUpState.password])) {
+              await context.read<SignUpCubit>().signUpWithCredentials();
+
+              onboardContext.add(
+                ContinueOnboarding(
+                  isSignup: true,
+                  user: User.empty.copyWith(
+                    id: signUpContext.state.user!.uid,
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Check your email and password.'),
+                ),
+              );
+            }
+          },
+          children: [
+            const CustomTextHeader(
+              text: 'What\'s Your Email Address?',
             ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Check your email and password.'),
+            BlocBuilder<SignUpCubit, SignUpState>(
+              buildWhen: (previous, current) => previous.email != current.email,
+              builder: (context, state) {
+                return CustomTextField(
+                  onChanged: (value) {
+                    context.read<SignUpCubit>().emailChanged(value);
+                  },
+                  hint: 'ENTER YOUR EMAIL',
+                  errorText: state.email.isNotValid && state.email.value != ''
+                      ? 'The email is invalid.'
+                      : null,
+                );
+              },
             ),
-          );
-        }
+            const SizedBox(height: 75),
+            const CustomTextHeader(
+              text: 'What\'s Your Email Address?',
+            ),
+            BlocBuilder<SignUpCubit, SignUpState>(
+              buildWhen: (previous, current) =>
+                  previous.password != current.password,
+              builder: (context, state) {
+                return CustomTextField(
+                  onChanged: (value) {
+                    context.read<SignUpCubit>().passwordChanged(value);
+                  },
+                  hint: 'ENTER YOUR PASSWORD',
+                  errorText:
+                      state.password.isNotValid && state.password.value != ''
+                          ? 'The password must contain at least 8 characters.'
+                          : null,
+                );
+              },
+            ),
+          ],
+        );
       },
-      children: [
-        const CustomTextHeader(
-          text: 'What\'s Your Email Address?',
-        ),
-        BlocBuilder<SignUpCubit, SignUpState>(
-          buildWhen: (previous, current) => previous.email != current.email,
-          builder: (context, state) {
-            return CustomTextField(
-              onChanged: (value) {
-                context.read<SignUpCubit>().emailChanged(value);
-              },
-              hint: 'ENTER YOUR EMAIL',
-              errorText: state.email.isNotValid && state.email.value != ''
-                  ? 'The email is invalid.'
-                  : null,
-            );
-          },
-        ),
-        const SizedBox(height: 75),
-        const CustomTextHeader(
-          text: 'What\'s Your Email Address?',
-        ),
-        BlocBuilder<SignUpCubit, SignUpState>(
-          buildWhen: (previous, current) =>
-              previous.password != current.password,
-          builder: (context, state) {
-            return CustomTextField(
-              onChanged: (value) {
-                context.read<SignUpCubit>().passwordChanged(value);
-              },
-              hint: 'ENTER YOUR PASSWORD',
-              errorText: state.password.isNotValid && state.password.value != ''
-                  ? 'The password must contain at least 8 characters.'
-                  : null,
-            );
-          },
-        ),
-      ],
     );
   }
 }

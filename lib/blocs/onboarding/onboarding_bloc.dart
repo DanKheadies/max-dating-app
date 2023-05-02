@@ -66,15 +66,20 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
   void _onUpdateUser(
     UpdateUser event,
     Emitter<OnboardingState> emit,
-  ) {
-    final state = this.state;
+  ) async {
+    // NOTE: this calls for UpdateUser's state and tab, but why matter?
+    // final state = this.state;
     // print('update user (ob bloc)');
+    // UPDATE: this is called multiple times as the Streams / repos listening
+    // to the user account run this and notify those subs
     if (state is OnboardingLoaded) {
-      _databaseRepository.updateUser(event.user);
+      print('update user, notify the sub');
+      await _databaseRepository.updateUser(event.user);
+
       emit(
         OnboardingLoaded(
           user: event.user,
-          tabController: state.tabController,
+          tabController: (state as OnboardingLoaded).tabController,
         ),
       );
     }
@@ -90,6 +95,8 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
       await _storageRepository.uploadImage(user, event.image);
 
       _databaseRepository.getUser(user.id!).listen((user) {
+        // print('taco');
+        print('update user images');
         add(
           UpdateUser(
             user: user,
@@ -122,6 +129,10 @@ class OnboardingBloc extends Bloc<OnboardingEvent, OnboardingState> {
       );
 
       _databaseRepository.getUser(state.user.id!).listen((user) {
+        // print('daco');
+        print('update user location');
+        print('getUser stateId: ${state.user.id}');
+        print('listened userId: $user');
         add(
           UpdateUser(
             user: state.user.copyWith(

@@ -36,17 +36,15 @@ class Location extends Equatable {
 
   factory Location.fromJson(Map<String, dynamic> json) {
     // print('location model fromJson');
-    // print(json);
-    print('dank');
-    print(json.keys);
+    // print(json.keys);
     if (json.keys.contains('place_id')) {
-      print('place_id');
-      print(json['place_id']);
-      print(json['name']);
-      print(json['geometry']);
-      print(json['geometry']['location']);
-      print(json['geometry']['location']['lat']);
-      print(json['geometry']['location']['lng']);
+      // print('place_id');
+      // print(json['place_id']);
+      // print(json['name']);
+      // print(json['geometry']);
+      // print(json['geometry']['location']);
+      // print(json['geometry']['location']['lat']);
+      // print(json['geometry']['location']['lng']);
       return Location(
         placeId: json['place_id'],
         name: json['name'],

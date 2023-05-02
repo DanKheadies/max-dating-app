@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       builder: (context) {
         return BlocProvider.of<AuthBloc>(context).state.status ==
                 AuthStatus.unauthenticated
-            ? const OnboardingScreen()
+            ? const LoginScreen()
             : BlocProvider(
                 create: (context) => SwipeBloc(
                   authBloc: context.read<AuthBloc>(),
@@ -85,6 +85,8 @@ class SwipeLoadedHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('daco');
+    // print(state.users[0]);
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'DISCOVER',

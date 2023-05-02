@@ -44,8 +44,12 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpWithCredentials() async {
-    if (Formz.validate([state.email, state.password]) ||
-        state.status == FormzSubmissionStatus.inProgress) return;
+    print('derp');
+    print(state.email);
+    print(state.password);
+    if (!Formz.validate([state.email, state.password])) return;
+    if (state.status == FormzSubmissionStatus.inProgress) return;
+    print('poo');
 
     emit(
       state.copyWith(
@@ -61,6 +65,7 @@ class SignUpCubit extends Cubit<SignUpState> {
     //   );
     // }
     try {
+      print('wat');
       var user = await _authRepository.signUp(
         email: state.email.value,
         password: state.password.value,

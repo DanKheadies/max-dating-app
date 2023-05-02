@@ -28,7 +28,7 @@ class MatchBloc extends Bloc<MatchEvent, MatchState> {
   ) {
     _databaseSubscription =
         _databaseRepository.getMatches(event.user).listen((matchedUsers) {
-      print('Matched Users: $matchedUsers');
+      print('Matched Users: ${matchedUsers.length}');
       add(
         UpdateMatches(
           matchedUsers: matchedUsers,

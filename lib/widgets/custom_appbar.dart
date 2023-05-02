@@ -8,6 +8,8 @@ import 'package:max_dating_app/screens/screens.dart';
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final String title;
   final bool hasActions;
+  final bool isLogin;
+  final bool isSignUp;
   final List<IconData> actionsIcons;
   final List<String> actionsRoutes;
 
@@ -15,6 +17,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
     super.key,
     required this.title,
     this.hasActions = true,
+    this.isLogin = false,
+    this.isSignUp = false,
     this.actionsIcons = const [
       Icons.message,
       Icons.person,
@@ -36,13 +40,15 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           Expanded(
             child: InkWell(
               onTap: () {
-                title == 'DISCOVER'
+                title == 'DISCOVER' || isLogin
                     ? () {}
-                    : Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        '/home',
-                        (route) => false,
-                      );
+                    : isSignUp
+                        ? Navigator.of(context).pop()
+                        : Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/home',
+                            (route) => false,
+                          );
               },
               enableFeedback: title == 'DISCOVER' ? false : true,
               child: SvgPicture.asset(

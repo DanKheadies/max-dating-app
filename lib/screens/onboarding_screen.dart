@@ -61,6 +61,7 @@ class OnboardingScreen extends StatelessWidget {
             appBar: const CustomAppBar(
               title: 'ARROW',
               hasActions: false,
+              isSignUp: true,
             ),
             body: Padding(
               padding: const EdgeInsets.symmetric(

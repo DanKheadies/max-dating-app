@@ -33,6 +33,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<UpdateUserLocation>(_onUpdateUserLocation);
 
     _authSubscription = _authBloc.stream.listen((state) {
+      print('auth sub too');
       if (state.user is AuthUserChanged) {
         if (state.user != null) {
           add(
@@ -57,6 +58,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     //   );
     // });
     User user = await _databaseRepository.getUser(event.userId).first;
+    print('load profile)');
     emit(
       ProfileLoaded(
         user: user,
@@ -88,6 +90,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     final state = this.state;
 
     if (state is ProfileLoaded) {
+      print('save profile and update (and then load)');
       _databaseRepository.updateUser(state.user);
 
       emit(

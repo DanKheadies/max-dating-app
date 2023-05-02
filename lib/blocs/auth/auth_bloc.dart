@@ -28,7 +28,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _authUserSubscription = _authRepository.user.listen((authUser) {
       print('Auth user: $authUser');
       if (authUser != null) {
+        print('auth user no long null');
         _databaseRepository.getUser(authUser.uid).listen((user) {
+          print('adding auth user change');
           add(
             AuthUserChanged(
               authUser: authUser,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:max_dating_app/blocs/blocs.dart';
 import 'package:max_dating_app/repositories/repositories.dart';
+import 'package:max_dating_app/screens/screens.dart';
 import 'package:max_dating_app/widgets/widgets.dart';
 
 class SignOut extends StatelessWidget {
@@ -18,8 +19,14 @@ class SignOut extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () {
+                  var navCon = Navigator.of(context);
+
                   RepositoryProvider.of<AuthRepository>(context).signOut();
                   // Navigator.pushNamed(context, '/');
+                  navCon.pushNamedAndRemoveUntil(
+                    LoginScreen.routeName,
+                    (route) => false,
+                  );
                 },
                 child: Center(
                   child: Text(

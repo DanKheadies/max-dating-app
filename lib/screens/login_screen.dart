@@ -30,6 +30,7 @@ class LoginScreen extends StatelessWidget {
       appBar: const CustomAppBar(
         title: 'ARROW',
         hasActions: false,
+        isLogin: true,
       ),
       body: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) {

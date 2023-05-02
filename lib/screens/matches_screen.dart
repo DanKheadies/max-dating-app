@@ -71,23 +71,26 @@ class MatchesScreen extends StatelessWidget {
             );
           }
           if (state is MatchUnavailable) {
-            return Column(
-              children: [
-                Text(
-                  'No matches yet.',
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 20),
-                CustomElevatedButton(
-                  text: 'BACK TO SWIPING',
-                  beginColor: Theme.of(context).colorScheme.secondary,
-                  endColor: Theme.of(context).colorScheme.primary,
-                  textColor: Colors.white,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'No matches yet.',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: 20),
+                  CustomElevatedButton(
+                    text: 'BACK TO SWIPING',
+                    beginColor: Theme.of(context).colorScheme.secondary,
+                    endColor: Theme.of(context).colorScheme.primary,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
             );
           } else {
             return const Center(
@@ -127,23 +130,23 @@ class ChatsList extends StatelessWidget {
               UserImageSmall(
                 height: 75,
                 width: 75,
-                imageUrl: activeMatches[index].matchedUser.imageUrls[0],
+                imageUrl: activeMatches[index].matchUser.imageUrls[0],
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    activeMatches[index].matchedUser.name,
+                    activeMatches[index].matchUser.name,
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    activeMatches[index].chat![0].messages[0].message,
+                    activeMatches[index].chat.messages[0].message,
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    activeMatches[index].chat![0].messages[0].timeString,
+                    activeMatches[index].chat.messages[0].timeString,
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
@@ -152,42 +155,6 @@ class ChatsList extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class MatchesList extends StatelessWidget {
-  const MatchesList({
-    super.key,
-    required this.inactiveMatches,
-  });
-
-  final List<Match> inactiveMatches;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: inactiveMatches.length,
-        itemBuilder: (context, index) {
-          return Column(
-            children: [
-              UserImageSmall(
-                height: 75,
-                width: 75,
-                imageUrl: inactiveMatches[index].matchedUser.imageUrls[0],
-              ),
-              Text(
-                inactiveMatches[index].matchedUser.name,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-            ],
-          );
-        },
-      ),
     );
   }
 }
